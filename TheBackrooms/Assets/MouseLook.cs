@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MouseLook : MonoBehaviour
 {
+    public GameObject player;
     public Transform cam;
     public float mouseSensitivity = 100f;
 
@@ -22,7 +23,7 @@ public class MouseLook : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-        transform.Rotate(0f, mouseX, 0f);
+        player.transform.Rotate(0f, mouseX, 0f);
 
         xRotation -= mouseY;
 

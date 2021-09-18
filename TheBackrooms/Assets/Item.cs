@@ -6,8 +6,13 @@ public class Item : MonoBehaviour
 {
     public GameObject textPrefab;
     public ItemObject item;
-    public GameObject player;
+    GameObject player;
     GameObject text;
+
+    private void Start()
+    {
+        player = GameObject.Find("Player");
+    }
 
     private void Update()
     {
@@ -19,7 +24,7 @@ public class Item : MonoBehaviour
 
     public void showFloatingText()
     {
-        text = Instantiate(textPrefab, transform.position, Quaternion.identity, transform);
+        text = Instantiate(textPrefab, transform.position + new Vector3(0f, 2f, 0f), Quaternion.identity, transform);
     }
 
     public void lookTextAtPlayer() {
