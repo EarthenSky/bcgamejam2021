@@ -20,7 +20,7 @@ public class pathing : MonoBehaviour
         int[] array = new int[3];
         array[0] = Random.Range(0,2);
         array[1] = Random.Range(0,2);
-        array[2] = Random.Range(-radius,radius+1);
+        //array[2] = Random.Range(-radius,radius+1);
         array[1] *= -1;
         //change these variables later
         int z = (int)player.transform.position[2]/10;
@@ -29,11 +29,11 @@ public class pathing : MonoBehaviour
         int i = 0;
 
         if(array[1]<0){
-            array[1]*=radius;
+            //array[1]*=radius;
         }
         else{
             array[1]++;
-            array[1]*=radius;
+            //array[1]*=radius;
         }
         if(array[0] == 0){
             z+=array[1];
@@ -51,16 +51,16 @@ public class pathing : MonoBehaviour
             z = 0;
         }
         
-        while(bool[z*cols+x+i] == 0){
-            i++;
-        }
+        //while(bool[z*cols+x+i] == 0){
+        //    i++;
+        //}
         int remainder = (z*cols+x+i)%cols;
         if(remainder<x){
             z++;
-            x = remainder+;
+            //x = remainder+;
         }
        
-        vector3 position = new vector3(x+5,player.transform.position[1],z+5)
+        //vector3 position = new vector3(x+5,player.transform.position[1],z+5)
     }
 
     // Update is called once per frame
