@@ -118,7 +118,7 @@ public class GenerateMazeChunk : MonoBehaviour
             for (int x = 0; x < width * 2; x++) {
                 if (GetAt(wallMap, x, y, width*2)) {
                     GameObject o = GameObject.Instantiate(floor, new Vector3(transform.localPosition.x + x * 10, 0, transform.localPosition.y + y * 10), Quaternion.identity, gameObject.transform);
-                    //o.layer = LayerMask.NameToLayer("groundLayer");
+                    o.layer = LayerMask.NameToLayer("Ground");
                 } else {
                     GameObject.Instantiate(cube, new Vector3(transform.localPosition.x + x * 10, 0, transform.localPosition.y + y * 10), Quaternion.identity, gameObject.transform);
                 }
