@@ -1,17 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GenerateMazeChunk : MonoBehaviour
 {
     public GameObject cube;
     public GameObject floor;
-    public const int width = 32;
-    public const int height = 32;
+    public GameObject ceiling;
+    public GameObject ceilingLight;
+
+    public const int width = 16;
+    public const int height = 16;
 
     public List<bool> wallMap = new List<bool>();
+    public List<int> ceilingRotationMap = new List<int>();
 
     private static float GetAt(List<float> list, int x, int y, int width=width) {
+        return list[x + width * y];
+    }
+    private static int GetAt(List<int> list, int x, int y, int width=width) {
         return list[x + width * y];
     }
     private static bool GetAt(List<bool> list, int x, int y, int width=width) {
@@ -53,6 +61,10 @@ public class GenerateMazeChunk : MonoBehaviour
         // init our actual map -> this is our map with 
         for (int i = 0; i < width * 2 * height * 2; i++) {
             wallMap.Add(false);
+        }
+
+        for (int i = 0; i < width * 2 * height * 2; i++) {
+            ceilingRotationMap.Add(Random.Range(0, 8));
         }
 
         List<(int, int)> frontier = new List<(int, int)>();
@@ -114,16 +126,34 @@ public class GenerateMazeChunk : MonoBehaviour
     }
 
     private void GenerateMesh() {
+        GameObject groundTiles = GameObject.Instantiate(new GameObject("groundTiles"), gameObject.transform);
+        GameObject ceilingList = GameObject.Instantiate(new GameObject("ceilingList"), gameObject.transform);
+
         for (int y = 0; y < height * 2; y++) {
             for (int x = 0; x < width * 2; x++) {
                 if (GetAt(wallMap, x, y, width*2)) {
-                    GameObject o = GameObject.Instantiate(floor, new Vector3(transform.localPosition.x + x * 10, 0, transform.localPosition.y + y * 10), Quaternion.identity, gameObject.transform);
+                    GameObject o = GameObject.Instantiate(floor, new Vector3(transform.localPosition.x + x * 5, 0, transform.localPosition.y + y * 5), Quaternion.identity, groundTiles.transform);
                     o.layer = LayerMask.NameToLayer("Ground");
                 } else {
-                    GameObject.Instantiate(cube, new Vector3(transform.localPosition.x + x * 10, 0, transform.localPosition.y + y * 10), Quaternion.identity, gameObject.transform);
+                    GameObject.Instantiate(cube, new Vector3(transform.localPosition.x + x * 5, 0, transform.localPosition.y + y * 5), Quaternion.identity, groundTiles.transform);
                 }
             }
         }
+
+        for (int y = 0; y < height * 2; y++) {
+            for (int x = 0; x < width * 2; x++) {
+                var rot = GetAt(ceilingRotationMap, x, y, width*2); // no longer checks for rotation
+                if (rot == 0) {
+                    GameObject ceil = GameObject.Instantiate(ceilingLight, new Vector3(transform.localPosition.x + x * 5, 6, transform.localPosition.y + y * 5), Quaternion.identity, ceilingList.transform);
+                    ceil.transform.Rotate(new Vector3(0, 0, 180));
+                } else {
+                    GameObject ceil = GameObject.Instantiate(ceiling, new Vector3(transform.localPosition.x + x * 5, 6, transform.localPosition.y + y * 5), Quaternion.identity, ceilingList.transform);
+                    ceil.transform.Rotate(new Vector3(0, 0, 180));
+                }
+
+            }
+        }
+        
     }
 
     // Update is called once per frame
