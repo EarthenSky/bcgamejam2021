@@ -10,6 +10,7 @@ public class DefaultItem : ItemObject
     private void Awake()
     {
        type = ItemType.Default;
+       
         
     }
 }

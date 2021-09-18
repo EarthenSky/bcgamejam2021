@@ -9,7 +9,6 @@ public class PlayerInventory : MonoBehaviour
    
     private void Start()
     {
-       
     }
 
     private void Update()

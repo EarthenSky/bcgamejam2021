@@ -14,6 +14,10 @@ public class InventoryObject : ScriptableObject
         container.Add(itemSlot);
         
     }
+
+    public void clearInv() {
+        container.Clear();
+    }
 }
 
 
@@ -24,7 +28,8 @@ public class InventorySlot {
     //TODO: ADD (slotsize)
 
     public InventorySlot(ItemObject _item) {
-        item = _item;    
+        item = _item;
+        
     }
 
 }
