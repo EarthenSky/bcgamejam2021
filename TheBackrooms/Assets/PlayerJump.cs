@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerJump : MonoBehaviour
 {
 
-    public float jumpForce = 4f;
+    public float jumpForce = 1f;
 
     public Transform groundCheck;
     float groundDistance = 1f;
