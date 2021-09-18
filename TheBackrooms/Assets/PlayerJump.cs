@@ -5,7 +5,8 @@ using UnityEngine;
 public class PlayerJump : MonoBehaviour
 {
 
-    public float jumpForce = 1f;
+    public float jumpVelocity = 4f;
+    public float fallMultiplier = 2.5f;
 
     public Transform groundCheck;
     float groundDistance = 1f;
@@ -21,10 +22,13 @@ public class PlayerJump : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-   
-        if (isGrounded() && Input.GetKey(KeyCode.Space)) {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    {   
+        //gives a crisper jump
+        if (rb.velocity.y < 0) {
+            rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+        }
+        if (isGrounded() && Input.GetKey(KeyCode.Space)){
+            rb.velocity = Vector3.up * jumpVelocity;
         }
     }
 
