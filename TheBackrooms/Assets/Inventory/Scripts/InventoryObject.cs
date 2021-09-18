@@ -6,6 +6,7 @@ using UnityEngine;
 [CreateAssetMenuAttribute(fileName = "new Inventory", menuName = "Inventory System/Inventory")]
 public class InventoryObject : ScriptableObject
 {
+    public ItemDatabaseObject database;
     public List<InventorySlot> container = new List<InventorySlot>();
 
     public void addItem(ItemObject _item) {
