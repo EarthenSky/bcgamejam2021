@@ -7,7 +7,6 @@ public class MouseLook : MonoBehaviour
     public Transform cam;
     public float mouseSensitivity = 100f;
 
-    float headRotation = 0f;
     float xRotation = 0;
     // Start is called before the first frame update
     void Start()
@@ -27,7 +26,7 @@ public class MouseLook : MonoBehaviour
 
         xRotation -= mouseY;
 
-        Mathf.Clamp(xRotation, -90, 90);
+        xRotation = Mathf.Clamp(xRotation, -90, 90);
 
         //doing the transformations on the camera based off of the mouse movement
         cam.localEulerAngles = new Vector3(xRotation, 0f, 0f);
