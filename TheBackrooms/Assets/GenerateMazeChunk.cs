@@ -1,11 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEditor.SceneManagement;
 
+namespace UnityEngine.AI{
 public class GenerateMazeChunk : MonoBehaviour
 {
-    public GameObject cube;
+    public GameObject cube,pathController;
+    public GameObject node;
     public GameObject floor;
+    public GameObject test;
     public const int width = 32;
     public const int height = 32;
 
@@ -112,18 +117,31 @@ public class GenerateMazeChunk : MonoBehaviour
 
         GenerateMesh();
     }
-
     private void GenerateMesh() {
+        NavMeshSurface xyz = null;
+        int counter = 0;
         for (int y = 0; y < height * 2; y++) {
             for (int x = 0; x < width * 2; x++) {
                 if (GetAt(wallMap, x, y, width*2)) {
                     GameObject o = GameObject.Instantiate(floor, new Vector3(transform.localPosition.x + x * 10, 0, transform.localPosition.y + y * 10), Quaternion.identity, gameObject.transform);
                     o.layer = LayerMask.NameToLayer("Ground");
+                    xyz = o.AddComponent<NavMeshSurface>();
+                
+                    if(counter == width*height/20){
+                        pathController.GetComponent<pathController>().allTiles.Add(new Vector3(x*10,-2,y*10));
+                        counter = 0;
+                        pathController.GetComponent<pathController>().vectors.Add(new Vector3(x*10,2,y*10));
+                    }
+                    counter ++;
+                    
                 } else {
-                    GameObject.Instantiate(cube, new Vector3(transform.localPosition.x + x * 10, 0, transform.localPosition.y + y * 10), Quaternion.identity, gameObject.transform);
+                    GameObject b = GameObject.Instantiate(cube, new Vector3(transform.localPosition.x + x * 10, 0, transform.localPosition.y + y * 10), Quaternion.identity, gameObject.transform);
                 }
             }
         }
+        pathController.GetComponent<pathController>().finished = true;
+        xyz.BuildNavMesh();
+        
     }
 
     // Update is called once per frame
@@ -131,4 +149,5 @@ public class GenerateMazeChunk : MonoBehaviour
     {
         
     }
+}
 }
