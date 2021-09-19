@@ -48,8 +48,8 @@ public class pathController : MonoBehaviour
         GameObject o = GameObject.Instantiate(node,v,Quaternion.identity, gameObject.transform);
         o.GetComponent<MeshRenderer>().enabled = false;
         squares.Add(o);
-        allIndex+=5;
-        allIndex = allIndex%allTiles.Count;
+        allIndex += 5;
+        allIndex = allIndex % allTiles.Count;
     }
 
     public void spawn(){
