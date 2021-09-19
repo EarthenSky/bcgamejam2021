@@ -1,35 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DisplayInventory : MonoBehaviour
 {
+    public GameObject canvas;
+    public GameObject inventoryPrefab;
     public InventoryObject inventory;
     public int X_START;
     public int Y_START;
     public int X_SPACE_BETWEEN_ITEMS;
     public int NUMBER_OF_COLUMNS;
     public int Y_SPACE_BETWEEN_ITEMS;
-    Dictionary<InventorySlot, GameObject> itemsDisplayed = new Dictionary<InventorySlot, GameObject>();
+    Dictionary<GameObject, InventorySlot> itemsDisplayed = new Dictionary<GameObject, InventorySlot >();
+
 
     // Start is called before the first frame update
     void Start()
     {
-        createDisplay();
+        createSlots();
     }
 
     // Update is called once per frame
     void Update()
     {
-        updateDisplay();
+        
     }
 
-    public void createDisplay() {
-        for (int i = 0; i < inventory.container.Count; i++) {
-            var obj = Instantiate(inventory.container[i].item.prefab, Vector3.zero, Quaternion.identity, transform);
+    public void createSlots() {
+
+        itemsDisplayed = new Dictionary<GameObject, InventorySlot>();
+        for (int i = 0; i < inventory.container.Items.Length; i++)
+        {
+            var obj = Instantiate(inventoryPrefab, Vector3.zero, Quaternion.identity, transform);
             obj.GetComponent<RectTransform>().localPosition = getPosition(i);
-            itemsDisplayed.Add(inventory.container[i], obj);
+            obj.transform.localRotation = Quaternion.identity;
+            itemsDisplayed.Add(obj, inventory.container.Items[i]);
         }
+
     }
 
     public Vector3 getPosition(int i) {
@@ -37,13 +46,6 @@ public class DisplayInventory : MonoBehaviour
     }
 
     public void updateDisplay() {
-        for (int i = 0; i < inventory.container.Count; i++) {
-            if (!itemsDisplayed.ContainsKey(inventory.container[i])) {
-                var obj = Instantiate(inventory.container[i].item.prefab, Vector3.zero, Quaternion.identity, transform);
-                obj.GetComponent<RectTransform>().localPosition = getPosition(i);
-                itemsDisplayed.Add(inventory.container[i], obj);
-            }
-
-        }
+        
     }
 }
