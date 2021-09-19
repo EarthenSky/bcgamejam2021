@@ -78,9 +78,10 @@ public class pathController : MonoBehaviour
             squaresIndex++;
             
             enemyCount++;
-            VectorIndex %= vectors.Count;
+            
             squaresIndex %= squares.Count;
         }
+        VectorIndex %= vectors.Count;
     }
  public void spawnSpec(){
         Vector3 v = vectors[VectorIndex];

@@ -8,6 +8,7 @@ public class spectre : MonoBehaviour
     private NavMeshAgent agent;
     GameObject player;
     public GameObject self;
+    private float factor = 3f;
     private int recalculating = 0;
     // Start is called before the first frame update
     void Start()
@@ -25,5 +26,12 @@ public class spectre : MonoBehaviour
             agent.destination = player.transform.position;
         }        
         recalculating++;
+        
+        if(Vector3.Distance(self.transform.position,player.transform.position)<30){
+            RenderSettings.ambientLight = new Color((124/factor/255),(127/factor/255),(74/factor/255));
+        }
+        else{
+            RenderSettings.ambientLight = new Color((124f/255),(127f/255),(74f/255));
+        }
     }
 }
