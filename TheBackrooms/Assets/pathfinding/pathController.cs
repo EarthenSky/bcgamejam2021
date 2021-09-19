@@ -16,8 +16,8 @@ public class pathController : MonoBehaviour
     GameObject WorldChunkManager;
 
     private int hardEnemyLimit = 100;
-    public int enemyLimit = 20;
-    public int enemyCount = 0,trueEnemyCount, downTime = 45, counter = 0;
+    public int enemyLimit = 30;
+    public int enemyCount = 0,trueEnemyCount, downTime = 30, counter = 0;
     
     public List<GameObject> squares;
     public List<Vector3> vectors;
