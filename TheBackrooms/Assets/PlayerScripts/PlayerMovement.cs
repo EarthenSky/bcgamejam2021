@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float playerSpeed = 12f;
-
     Rigidbody rb;
     
     // Start is called before the first frame update
@@ -21,13 +20,16 @@ public class PlayerMovement : MonoBehaviour
         float z = Input.GetAxis("Vertical");
         
         //creating the transformation vector and applying the movement to ridgidbody
-        //rb.MovePosition(transform.position + movement.normalized * playerSpeed * Time.deltaTime);
+        float speedMod = 0.85f;
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            speedMod = 1.5f;
+        }
+
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) {
             Vector3 movement = transform.right * x + transform.forward * z;
-            Vector3 final = movement.normalized * playerSpeed * 20 * Time.deltaTime;
-            rb.velocity = new Vector3(final.x, rb.velocity.y, final.z);
+            rb.MovePosition(transform.position + movement.normalized * playerSpeed * speedMod * Time.deltaTime);
         } else {
-            rb.velocity = new Vector3(0, rb.velocity.y, 0);
+            rb.MovePosition(transform.position);
         }
     }
 }

@@ -95,7 +95,7 @@ public class DisplayInventory : MonoBehaviour
         ItemType type = inventory.database.getItem[itemsDisplayed[obj].item.Id].type;
         if (type == ItemType.Food)
         {
-            stats.Heal(inventory.database.getItem[itemsDisplayed[obj].item.Id].name);   
+            stats.Heal(inventory.database.getItem[itemsDisplayed[obj].item.Id].name);
         }
         itemsDisplayed[obj] = new InventorySlot();
         

@@ -41,11 +41,11 @@ public class pathing : MonoBehaviour
             goal = true;
         } else if(absTimer >= 1800){
             goal = true;
-        } else if(Vector3.Distance(apos,player.transform.position)<10){
+        } else if(Vector3.Distance(apos, player.transform.position)<10){
             goal = true;
         }
         
-        if (Vector3.Distance(apos,player.transform.position)>300) {
+        if (Vector3.Distance(transform.position, player.transform.position) > 300) {
             self.transform.parent.GetComponent<pathController>().pool.Add(self);
             self.SetActive(false);
         }
