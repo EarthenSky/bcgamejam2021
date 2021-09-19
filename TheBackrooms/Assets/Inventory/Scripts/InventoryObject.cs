@@ -11,28 +11,35 @@ public class InventoryObject : ScriptableObject
 
     public void addItem(Item _item) {
 
-        
-        
+
+        setEmptySlot(_item);
         
     }
 
     public InventorySlot setEmptySlot(Item _item) {
+        Debug.Log(container.Items);
         for (int i = 0; i < container.Items.Length; i++)
         {
+            Debug.Log(container.Items[i]);
             if (container.Items[i].ID <= -1) {
                 container.Items[i].updateSlot(_item.Id,_item);
                 return container.Items[i];
             }
             
         }
-        return null;
+        return null;//setup what happens for when inv full
     }
+
 
     public void clearInv() {
         container.Items = new InventorySlot[20];
+        for (int i = 0; i < container.Items.Length; i++)
+        {
+            container.Items[i] = new InventorySlot();
+        }
     }
 
-  
+ 
 }
 
 
@@ -66,5 +73,4 @@ public class InventorySlot {
 [System.Serializable]
 public class Inventory {
     public InventorySlot[] Items = new InventorySlot[20];
-
 }
