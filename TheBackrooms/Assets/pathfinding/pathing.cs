@@ -18,10 +18,8 @@ public class pathing : MonoBehaviour
     void Start()
     {   
         player = GameObject.Find("Player");
-        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-        position = player.transform.position;
-        agent.destination = player.transform.position;
-        destination = agent.destination;
+        agent = self.GetComponent<NavMeshAgent>();
+        agent.destination = target.transform.position;
     }
 
     // Update is called once per frame
@@ -31,13 +29,13 @@ public class pathing : MonoBehaviour
         Vector3 apos = agent.transform.position;
         if(recalculating == 60 && goal){
             recalculating = -1;
-            position = player.transform.position;
+            agent.destination = player.transform.position;
         }
         
-        else if(Vector3.Distance(apos,tgoal)<3){
+        else if(Vector3.Distance(apos,tgoal)<7){
             goal = true;
         }
-        else if(absTimer == 1800){
+        else if(absTimer >= 1800){
             goal = true;
         }
         else if(Vector3.Distance(apos,player.transform.position)<10){
