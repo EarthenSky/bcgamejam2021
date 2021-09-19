@@ -6,6 +6,7 @@ public class pathController : MonoBehaviour
 {
     public bool finished = false;
     public bool spawnSpectre = false;
+    public GameObject currentChunk;
     private GameObject player;
     public GameObject enemy,node,spectre;
     public int hardLimit = 210;
@@ -88,7 +89,7 @@ public class pathController : MonoBehaviour
             GameObject o = GameObject.Instantiate(spectre,v,Quaternion.identity, gameObject.transform);
             o.GetComponent<spectre>().self = o;
             o.GetComponent<MeshRenderer>().enabled = false;
-            o.transform.parent = WorldChunkManager.transform;
+            o.transform.SetParent(currentChunk.transform);
             spawnSpectre = false;
         }
         VectorIndex %= vectors.Count;

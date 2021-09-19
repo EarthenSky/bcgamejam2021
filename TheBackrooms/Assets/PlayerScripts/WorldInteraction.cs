@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class WorldInteraction : MonoBehaviour
 {
-
     public GameObject camObject;
     Camera cam;
     PlayerInventory inv;

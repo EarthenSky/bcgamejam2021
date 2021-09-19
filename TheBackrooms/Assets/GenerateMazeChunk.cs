@@ -243,7 +243,7 @@ namespace UnityEngine.AI {
                     }
                 }
             }
-
+            pathController.GetComponent<pathController>().currentChunk = this.gameObject;
             pathController.GetComponent<pathController>().spawnSpectre = true;
             pathController.GetComponent<pathController>().finished = true;
         }
