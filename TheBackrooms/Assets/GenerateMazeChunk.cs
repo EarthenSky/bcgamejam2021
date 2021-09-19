@@ -1,153 +1,244 @@
 using System.Collections;
+using System.Data.Common;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEditor.SceneManagement;
 
-namespace UnityEngine.AI{
-public class GenerateMazeChunk : MonoBehaviour
-{
-    public GameObject cube,pathController;
-    public GameObject node;
-    public GameObject floor;
-    public GameObject test;
-    public const int width = 32;
-    public const int height = 32;
-
-    public List<bool> wallMap = new List<bool>();
-
-    private static float GetAt(List<float> list, int x, int y, int width=width) {
-        return list[x + width * y];
-    }
-    private static bool GetAt(List<bool> list, int x, int y, int width=width) {
-        return list[x + width * y];
-    }
-    private static void SetAt(List<float> list, int x, int y, float set, int width=width) {
-        list[x + width * y] = set;
-    }
-    private static void SetAt(List<bool> list, int x, int y, bool set, int width=width) {
-        list[x + width * y] = set;
-    }
-    public static bool InMap(int x, int y, int width=width, int height=height) {
-        return x > 0 && x < width && y > 0 && y < height;
-    }
-
-    // Start is called before the first frame update
-    void Start()
+namespace UnityEngine.AI {
+    public class GenerateMazeChunk : MonoBehaviour
     {
-        Random.InitState(Mathf.FloorToInt(Mathf.PerlinNoise(transform.localPosition.x, transform.localPosition.y) * (float)int.MaxValue));
-        List<float> map = new List<float>();
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                map.Add(Random.Range(0, 1000));
+        public GameObject pathController;
+        public GameObject node;
+        public GameObject test;
+
+        public Material wallMat;
+
+        public GameObject cube;
+        public GameObject floor;
+        public GameObject ceiling;
+        public GameObject ceilingLight;
+
+        public Mesh myGeom;
+
+        public const int width = 8;
+        public const int height = 8;
+
+        public List<bool> wallMap = new List<bool>();
+        public List<int> ceilingRotationMap = new List<int>();
+
+        private static float GetAt(List<float> list, int x, int y, int width=width) {
+            return list[x + width * y];
+        }
+        private static int GetAt(List<int> list, int x, int y, int width=width) {
+            return list[x + width * y];
+        }
+        private static bool GetAt(List<bool> list, int x, int y, int width=width) {
+            return list[x + width * y];
+        }
+        private static void SetAt(List<float> list, int x, int y, float set, int width=width) {
+            list[x + width * y] = set;
+        }
+        private static void SetAt(List<bool> list, int x, int y, bool set, int width=width) {
+            list[x + width * y] = set;
+        }
+        public static bool InMap(int x, int y, int width=width, int height=height) {
+            return x > 0 && x < width && y > 0 && y < height;
+        }
+
+        private static void Shuffle<T>(IList<T> list) {  
+            int n = list.Count;  
+            while (n > 1) {  
+                n--;
+                int k = Random.Range(0, n + 1);  
+                T value = list[k];  
+                list[k] = list[n];  
+                list[n] = value;  
+            }  
+        }
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            var trueSeed = Mathf.FloorToInt(Mathf.PerlinNoise((transform.position.x + 1000) / 5217.7f, (transform.position.z + 1201) / 5037.9f) * int.MaxValue);
+            Random.InitState(trueSeed);
+            List<float> map = new List<float>();
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    map.Add(Random.Range(1, 500) * Random.Range(1, 500));
+                }
             }
-        }
 
-        // TODO: use perlin noise to seed a random number generator
-        var randomX = Mathf.PerlinNoise(transform.localPosition.x, transform.localPosition.y);
-        var randomY = Mathf.PerlinNoise(transform.localPosition.y, transform.localPosition.x);
-        var startX = Mathf.FloorToInt(randomX * width);
-        var startY = Mathf.FloorToInt(randomY * height);
-        
-        // Implement prim's algorithm
-        List<bool> set = new List<bool>(); // this holds items in frontier
-        for (int i = 0; i < width * height; i++) {
-            set.Add(false);
-        }
-
-        // init our actual map -> this is our map with 
-        for (int i = 0; i < width * 2 * height * 2; i++) {
-            wallMap.Add(false);
-        }
-
-        List<(int, int)> frontier = new List<(int, int)>();
-        frontier.Add((startX, startY));
-        Debug.Log(frontier[0]);
-
-        while (frontier.Count != 0) {
-            // TODO: this sort is inefficient...
-            frontier.Sort((a, b) => GetAt(map, a.Item1, a.Item2).CompareTo(GetAt(map, b.Item1, b.Item2)));
-            (int, int) current = frontier[frontier.Count-1];
-            frontier.RemoveAt(frontier.Count-1);
-
-            // add to the actual map of walls & floors.
-            (int, int) last = (-1, -1);
-            if (InMap(current.Item1 - 1, current.Item2) && GetAt(wallMap, (current.Item1 - 1)*2, (current.Item2)*2, width*2) == true)
-                last = (current.Item1 - 1, current.Item2);
-            else if (InMap(current.Item1 + 1, current.Item2) && GetAt(wallMap, (current.Item1 + 1)*2, (current.Item2)*2, width*2) == true)
-                last = (current.Item1 + 1, current.Item2);
-            else if (InMap(current.Item1, current.Item2 - 1) && GetAt(wallMap, (current.Item1)*2, (current.Item2 - 1)*2, width*2) == true)
-                last = (current.Item1, current.Item2 - 1);
-            else if (InMap(current.Item1, current.Item2 + 1) && GetAt(wallMap, (current.Item1)*2, (current.Item2 + 1)*2, width*2) == true)
-                last = (current.Item1, current.Item2 + 1);
+            // TODO: use perlin noise to seed a random number generator
+            var randomX = Random.Range(1, 500)/500f * Mathf.PerlinNoise((transform.position.x + 1000)/3, (transform.position.z + 1000)/3);
+            var randomY = Random.Range(1, 500)/500f * Mathf.PerlinNoise((transform.position.z + 1201)/3, (transform.position.x + 1201)/3);
+            var startX = Mathf.FloorToInt(randomX * width);
+            var startY = Mathf.FloorToInt(randomY * height);
             
-            // write the path
-            if (last != (-1, -1)) {
-                if (GetAt(wallMap, (current.Item1 + last.Item1), (current.Item2 + last.Item2), width*2) == true) {
-                    Debug.Log("nooooo");
-                }
-                SetAt(wallMap, (current.Item1 + last.Item1), (current.Item2 + last.Item2), true, width*2);
-            } else {
-                Debug.Log("fuck");
-                //Debug.Log(frontier);
-            }
-            SetAt(wallMap, current.Item1*2, current.Item2*2, true, width*2);
-
-            // add adjacent objects.
-            if (InMap(current.Item1 - 1, current.Item2) && GetAt(set, current.Item1 - 1, current.Item2) == false) {
-                SetAt(set, current.Item1 - 1, current.Item2, true);
-                frontier.Add((current.Item1 - 1, current.Item2));
+            // Implement prim's algorithm
+            List<bool> set = new List<bool>(); // this holds items in frontier
+            for (int i = 0; i < width * height; i++) {
+                set.Add(false);
             }
 
-            if (InMap(current.Item1 + 1, current.Item2) && GetAt(set, current.Item1 + 1, current.Item2) == false) {
-                SetAt(set, current.Item1 + 1, current.Item2, true);
-                frontier.Add((current.Item1 + 1, current.Item2));
+            // init our actual map -> this is our map with 
+            for (int i = 0; i < width * 2 * height * 2; i++) {
+                wallMap.Add(false);
             }
 
-            if (InMap(current.Item1, current.Item2 - 1) && GetAt(set, current.Item1, current.Item2 -1) == false) {
-                SetAt(set, current.Item1, current.Item2 - 1, true);
-                frontier.Add((current.Item1, current.Item2 - 1));
+            for (int i = 0; i < width * 2 * height * 2; i++) {
+                ceilingRotationMap.Add(Random.Range(0, 24));
             }
 
-            if (InMap(current.Item1, current.Item2 + 1) && GetAt(set, current.Item1, current.Item2 + 1) == false) {
-                SetAt(set, current.Item1, current.Item2 + 1, true);
-                frontier.Add((current.Item1, current.Item2 + 1));
-            }
-        }
+            List<(int, int, float)> frontier = new List<(int, int, float)>();
+            frontier.Add((startX, startY, 0f));
 
-        GenerateMesh();
-    }
-    private void GenerateMesh() {
-        NavMeshSurface xyz = null;
-        int counter = 0;
-        for (int y = 0; y < height * 2; y++) {
-            for (int x = 0; x < width * 2; x++) {
-                if (GetAt(wallMap, x, y, width*2)) {
-                    GameObject o = GameObject.Instantiate(floor, new Vector3(transform.localPosition.x + x * 10, 0, transform.localPosition.y + y * 10), Quaternion.identity, gameObject.transform);
-                    o.layer = LayerMask.NameToLayer("Ground");
-                    xyz = o.AddComponent<NavMeshSurface>();
+            while (frontier.Count != 0) {
+                // TODO: this sort is inefficient...
+                frontier.Sort((a, b) => a.Item3.CompareTo(b.Item3));
+                (int, int) current = (frontier[frontier.Count-1].Item1, frontier[frontier.Count-1].Item2);
+                frontier.RemoveAt(frontier.Count-1);
+
+                // add to the actual map of walls & floors.
+                (int, int) last = (-1, -1);
+                List<(int, int)> directions = new List<(int, int)>{(current.Item1 - 1, current.Item2), (current.Item1 + 1, current.Item2), (current.Item1, current.Item2 - 1), (current.Item1, current.Item2 + 1)};
+                Shuffle(directions);
                 
-                    if(counter == width*height/20){
-                        pathController.GetComponent<pathController>().allTiles.Add(new Vector3(x*10,-2,y*10));
-                        counter = 0;
-                        pathController.GetComponent<pathController>().vectors.Add(new Vector3(x*10,2,y*10));
+                foreach(var item in directions) {
+                    if (InMap(item.Item1, item.Item2) && GetAt(wallMap, item.Item1*2, item.Item2*2, width*2) == true) {
+                        last = item;
+                        break;
                     }
-                    counter ++;
-                    
-                } else {
-                    GameObject b = GameObject.Instantiate(cube, new Vector3(transform.localPosition.x + x * 10, 0, transform.localPosition.y + y * 10), Quaternion.identity, gameObject.transform);
+                }
+
+                // write the path
+                if (last != (-1, -1)) {
+                    if (GetAt(wallMap, (current.Item1 + last.Item1), (current.Item2 + last.Item2), width*2) == true) {
+                        Debug.Log("nooooo");
+                    }
+                    SetAt(wallMap, (current.Item1 + last.Item1), (current.Item2 + last.Item2), true, width*2);
+                }
+                SetAt(wallMap, current.Item1*2, current.Item2*2, true, width*2);
+
+                // add adjacent objects.
+                if (InMap(current.Item1 - 1, current.Item2) && GetAt(set, current.Item1 - 1, current.Item2) == false) {
+                    SetAt(set, current.Item1 - 1, current.Item2, true);
+                    frontier.Add((current.Item1 - 1, current.Item2, GetAt(map, current.Item1 - 1, current.Item2)));
+                }
+
+                if (InMap(current.Item1 + 1, current.Item2) && GetAt(set, current.Item1 + 1, current.Item2) == false) {
+                    SetAt(set, current.Item1 + 1, current.Item2, true);
+                    frontier.Add((current.Item1 + 1, current.Item2, GetAt(map, current.Item1 + 1, current.Item2)));
+                }
+
+                if (InMap(current.Item1, current.Item2 - 1) && GetAt(set, current.Item1, current.Item2 -1) == false) {
+                    SetAt(set, current.Item1, current.Item2 - 1, true);
+                    frontier.Add((current.Item1, current.Item2 - 1, GetAt(map, current.Item1, current.Item2 - 1)));
+                }
+
+                if (InMap(current.Item1, current.Item2 + 1) && GetAt(set, current.Item1, current.Item2 + 1) == false) {
+                    SetAt(set, current.Item1, current.Item2 + 1, true);
+                    frontier.Add((current.Item1, current.Item2 + 1, GetAt(map, current.Item1, current.Item2 + 1)));
                 }
             }
-        }
-        pathController.GetComponent<pathController>().finished = true;
-        xyz.BuildNavMesh();
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+            for (int i = 0; i < 32; i++) {
+                int x = Random.Range(1, width*2-1);
+                int y = Random.Range(1, height*2-1);
+                SetAt(wallMap, x, y, true, width*2);
+            }
+
+            var bottomSeed = Mathf.FloorToInt(Mathf.PerlinNoise((transform.position.x + 1000+width*5)/100f, (transform.position.z + 1000)/100f) * int.MaxValue);
+            var rightSeed = Mathf.FloorToInt(Mathf.PerlinNoise((transform.position.x + 1000+width*5*2)/100f, (transform.position.z + 1000+height*5)/100f) * int.MaxValue);
+            var topSeed = Mathf.FloorToInt(Mathf.PerlinNoise((transform.position.x + 1000+width*5)/100f, (transform.position.z + 1000+2*height*5)/100f) * int.MaxValue);
+            var leftSeed = Mathf.FloorToInt(Mathf.PerlinNoise((transform.position.x + 1000)/100f, (transform.position.z + 1000+height*5)/100f) * int.MaxValue);
+
+            Debug.Log(topSeed);
+            Debug.Log(bottomSeed);
+
+            Random.InitState(bottomSeed);
+            Random.Range(1, 8);
+            for (int i = 0; i < Random.Range(3, 9); i++) {
+                var v = Random.Range(2, width*2-3);
+                SetAt(wallMap, v, 0, true, width*2);
+                SetAt(wallMap, v, 1, true, width*2);
+            }
+
+            Random.InitState(rightSeed);
+            Random.Range(1, 8);
+            for (int i = 0; i < Random.Range(3, 9); i++) {
+                SetAt(wallMap, width*2-1, Random.Range(2, height*2-3), true, width*2);
+            }
+
+            Random.InitState(topSeed);
+            Random.Range(1, 8);
+            for (int i = 0; i < Random.Range(3, 9); i++) {
+                SetAt(wallMap, Random.Range(2, width*2-3), height*2-1, true, width*2);
+            }
+
+            Random.InitState(leftSeed);
+            Random.Range(1, 8);
+            for (int i = 0; i < Random.Range(3, 9); i++) {
+                var v = Random.Range(2, height*2-3);
+                SetAt(wallMap, 0, v, true, width*2);
+                SetAt(wallMap, 1, v, true, width*2);
+            }
+
+            GenerateMesh();
+        }
+        private void GenerateMesh() {
+            NavMeshSurface xyz = null;
+            int counter = 0;
+
+            GameObject groundTiles = new GameObject("groundTiles");
+            groundTiles.transform.parent = transform;
+            GameObject ceilingList = new GameObject("ceilingList");
+            ceilingList.transform.parent = transform;
+
+            for (int y = 0; y < height * 2; y++) {
+                for (int x = 0; x < width * 2; x++) {
+                    if (GetAt(wallMap, x, y, width*2)) {
+                        // TODO: do in-a-row walls for performance...
+                        GameObject o = GameObject.Instantiate(floor, new Vector3(transform.localPosition.x + x * 5, 0, transform.localPosition.z + y * 5), Quaternion.identity, groundTiles.transform);
+                        o.layer = LayerMask.NameToLayer("Ground");
+                        xyz = o.AddComponent<NavMeshSurface>();
+                    
+                        if(counter == width*height/20){
+                            pathController.GetComponent<pathController>().allTiles.Add(new Vector3(x*10,-2,y*10));
+                            counter = 0;
+                            pathController.GetComponent<pathController>().vectors.Add(new Vector3(x*10,2,y*10));
+                        }
+                        counter ++;
+                        
+                    } else {
+                        GameObject b = GameObject.Instantiate(cube, new Vector3(transform.localPosition.x + x * 5, 0, transform.localPosition.z + y * 5), Quaternion.identity, groundTiles.transform);
+                    }
+                }
+            }
+
+            for (int y = 0; y < height * 2; y++) {
+                for (int x = 0; x < width * 2; x++) {
+                    if (GetAt(wallMap, x, y, width*2)) {
+                        var rot = GetAt(ceilingRotationMap, x, y, width*2); // no longer checks for rotation
+                        if (rot == 0) {
+                            GameObject ceil = GameObject.Instantiate(ceilingLight, new Vector3(transform.localPosition.x + x * 5, 4, transform.localPosition.z + y * 5), Quaternion.identity, ceilingList.transform);
+                            ceil.transform.Rotate(new Vector3(0, 0, 180));
+                        } else {
+                            GameObject ceil = GameObject.Instantiate(ceiling, new Vector3(transform.localPosition.x + x * 5, 4, transform.localPosition.z + y * 5), Quaternion.identity, ceilingList.transform);
+                            ceil.transform.Rotate(new Vector3(0, 0, 180));
+                        }
+                    }
+                }
+            }
+            pathController.GetComponent<pathController>().finished = true;
+            xyz.BuildNavMesh();
+            
+        }
+
+        // Update is called once per frame
+        void Update() {
+
+        }
+
     }
-}
 }
