@@ -3,7 +3,6 @@ using System.Data.Common;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEditor.SceneManagement;
 
 namespace UnityEngine.AI {
     public class GenerateMazeChunk : MonoBehaviour

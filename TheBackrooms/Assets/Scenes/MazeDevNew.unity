@@ -218,6 +218,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   finished: 0
   spawnSpectre: 0
+  currentChunk: {fileID: 0}
   enemy: {fileID: 4206069378733702904, guid: 50a806272a89f31469382115aeed32ce, type: 3}
   node: {fileID: 8312413308959350680, guid: 714037bd137a0bd4b947a969ef40df76, type: 3}
   spectre: {fileID: 4916025591628958842, guid: 010b7acb4db8fde42b42ade0f751a554, type: 3}
@@ -258,6 +259,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -0.62
       objectReference: {fileID: 0}
+    - target: {fileID: 2838403396927901280, guid: af2f6a700117bc24887503ef0c561a07,
+        type: 3}
+      propertyPath: m_Mass
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 2838403396927901281, guid: af2f6a700117bc24887503ef0c561a07,
         type: 3}
       propertyPath: m_Radius
@@ -271,7 +277,7 @@ PrefabInstance:
     - target: {fileID: 2838403396927901282, guid: af2f6a700117bc24887503ef0c561a07,
         type: 3}
       propertyPath: playerSpeed
-      value: 8
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 2838403396927901283, guid: af2f6a700117bc24887503ef0c561a07,
         type: 3}
