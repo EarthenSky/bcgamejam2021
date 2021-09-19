@@ -7,11 +7,14 @@ public class pathController : MonoBehaviour
     public bool finished = false;
     private GameObject player;
     public GameObject enemy,node;
-
+    public int hardLimit = 210;
     public int limit = 30;
-    public int current = 0;
-    public int enemyLimit = 10;
-    public int enemyCount = 0, downTime = 45, counter = 0;
+    public int current = 0, trueCurrent = 0;
+    public List<GameObject> pool;
+
+    private int hardEnemyLimit = 100;
+    public int enemyLimit = 20;
+    public int enemyCount = 0,trueEnemyCount, downTime = 45, counter = 0;
     
     public List<GameObject> squares;
     public List<Vector3> vectors;
@@ -28,7 +31,7 @@ public class pathController : MonoBehaviour
     void Update() {
         // only do this after we're done generating the chunk.
         if(finished) {
-            if (limit > current) {
+            if (limit > current && trueCurrent < hardLimit) {
                 createNode();
                 current++;
             }
@@ -40,6 +43,12 @@ public class pathController : MonoBehaviour
             }
 
             counter++;
+            if(pool.Count>0){
+                for(int i = 0; i<pool.Count; i++){
+                    pool[i].SetActive(true);
+                }
+                pool.Clear();
+            }
         }
     }
 
