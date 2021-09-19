@@ -36,7 +36,7 @@ public class pathController : MonoBehaviour
                 current++;
             }
 
-            if (counter == downTime && enemyCount < enemyLimit && vectors.Count>0){
+            if (counter == downTime && enemyCount < enemyLimit && vectors.Count>0 && hardEnemyLimit>trueEnemyCount){
                 counter =- 1;
                 spawn();
                 enemyCount++;
