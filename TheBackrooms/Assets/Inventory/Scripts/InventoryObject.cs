@@ -7,30 +7,39 @@ using UnityEngine;
 public class InventoryObject : ScriptableObject
 {
     public ItemDatabaseObject database;
-    public List<InventorySlot> container = new List<InventorySlot>();
+    public Inventory container;
 
-    public void addItem(ItemObject _item) {
+    public void addItem(Item _item) {
 
-        InventorySlot itemSlot = new InventorySlot(_item);
-        container.Add(itemSlot);
+        InventorySlot itemSlot = new InventorySlot(_item.Id,_item);
+        container.Items.Add(itemSlot);
         
     }
 
     public void clearInv() {
-        container.Clear();
+        container.Items.Clear();
     }
+
+  
 }
 
 
 [System.Serializable]
 public class InventorySlot {
-
-    public ItemObject item;
+    public int ID;
+    public Item item;
     //TODO: ADD (slotsize)
 
-    public InventorySlot(ItemObject _item) {
+    public InventorySlot(int _id, Item _item) {
         item = _item;
+        ID = _id;
         
     }
+
+}
+
+[System.Serializable]
+public class Inventory {
+    public List<InventorySlot> Items = new List<InventorySlot>();
 
 }

@@ -14,4 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   database: {fileID: 11400000, guid: 403d3ce450e7564428ba1400c4178340, type: 2}
   container:
-  - item: {fileID: 11400000, guid: f7e86e698d617234a8c8d840953dc5d7, type: 2}
+    Items:
+    - ID: 0
+      item:
+        Name: beef
+        Id: 0

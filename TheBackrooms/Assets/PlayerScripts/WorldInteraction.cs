@@ -25,7 +25,7 @@ public class WorldInteraction : MonoBehaviour
             GameObject interactedObject = interactionInfo.collider.gameObject;
             if (interactedObject.tag == "Item")
             {
-                Item item = interactedObject.GetComponent<Item>();
+                GroundItem item = interactedObject.GetComponent<GroundItem>();
                 if (!showingText)
                 {
                     item.showFloatingText();
@@ -35,7 +35,7 @@ public class WorldInteraction : MonoBehaviour
 
                 if (Input.GetKey(KeyCode.F))
                 {
-                    inv.inventory.addItem(item.item);
+                    inv.inventory.addItem(new Item(item.item));
                     Destroy(interactedObject.gameObject);
                 }
                 //have text appear above item saying "press f to pickup"
