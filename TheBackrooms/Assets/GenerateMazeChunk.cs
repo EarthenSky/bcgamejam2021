@@ -59,7 +59,7 @@ namespace UnityEngine.AI {
         }
 
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             pathController = GameObject.Find("EnemyController");
 
@@ -236,7 +236,6 @@ namespace UnityEngine.AI {
             }
             
             pathController.GetComponent<pathController>().finished = true;
-            surf.BuildNavMesh();
         }
 
         // Update is called once per frame
