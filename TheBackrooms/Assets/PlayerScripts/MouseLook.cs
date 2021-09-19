@@ -21,8 +21,8 @@ public class MouseLook : MonoBehaviour
     {
     //---------------------------------Mouse looking stuff--------------------------------
         //getting mouse mouvement
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * 0.02f;// * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * 0.02f;// * Time.deltaTime;
 
         player.transform.Rotate(0f, mouseX, 0f);
 

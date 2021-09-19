@@ -158,8 +158,8 @@ namespace UnityEngine.AI {
             var topSeed = Mathf.FloorToInt(Mathf.PerlinNoise((transform.position.x + 1000+width*5)/100f, (transform.position.z + 1000+2*height*5)/100f) * int.MaxValue);
             var leftSeed = Mathf.FloorToInt(Mathf.PerlinNoise((transform.position.x + 1000)/100f, (transform.position.z + 1000+height*5)/100f) * int.MaxValue);
 
-            Debug.Log(topSeed);
-            Debug.Log(bottomSeed);
+            //Debug.Log(topSeed);
+            //Debug.Log(bottomSeed);
 
             Random.InitState(bottomSeed);
             Random.Range(1, 8);

@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerJump : MonoBehaviour
 {
 
-    public float jumpVelocity = 4f;
+    public float jumpVelocity = 3f;
     public float fallMultiplier = 2.5f;
 
     public Transform groundCheck;
@@ -27,14 +27,14 @@ public class PlayerJump : MonoBehaviour
         if (rb.velocity.y < 0) {
             rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
         }
-        if (isGrounded() && Input.GetKey(KeyCode.Space)){
+        if (isGrounded() && Input.GetKey(KeyCode.Space)) {
             rb.velocity = Vector3.up * jumpVelocity;
         }
     }
 
     bool isGrounded()
     {
-        return Physics.CheckSphere(groundCheck.position, groundDistance, groundLayer);
+        return Physics.CheckSphere(groundCheck.position + new Vector3(0, 1, 0), groundDistance, groundLayer);
     }
 
 
