@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerStats : MonoBehaviour
 {
     private int hp = 4;
+    private float iTime = 0f;
+    public float pushAwayStrength = 8f;
 
     public AudioSource grape;
     public AudioSource sandwich;
@@ -115,7 +117,11 @@ public class PlayerStats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        iTime -= Time.deltaTime;
+        if (iTime <= 0) iTime = 0;
+        
         currentTime += Time.deltaTime;
+
         if (currentTime > limit) {
             currentTime = currentTime - limit;
             limit = Random.Range(2, 80);
@@ -140,6 +146,22 @@ public class PlayerStats : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.T)) {
             TakeDamage();
+        }
+    }
+
+    
+    public void OnCollisionEnter(Collision other) {
+        Debug.Log(other.gameObject.tag);
+        if (other.gameObject.tag == ("Enemy")) {
+            Debug.Log("Hit");
+            if(iTime <= 0) {
+                iTime = 1.5f;
+                TakeDamage();
+            } 
+
+            Vector3 difference = other.gameObject.transform.position - transform.position;
+            other.gameObject.GetComponent<Rigidbody>().AddForce(difference * pushAwayStrength, ForceMode.Impulse);
+
         }
     }
 }
