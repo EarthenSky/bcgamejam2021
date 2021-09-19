@@ -18,7 +18,7 @@ public class PlayerStats : MonoBehaviour
 
     private GameObject overlay;
 
-    void TakeDamage() {
+    public void TakeDamage() {
         hp -= 1;
         if (hp == 3)
             current = face1;
@@ -36,7 +36,7 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    void Heal(string foodname) {
+    public void Heal(string foodname) {
         hp += 1;
 
         if (hp == 3)
