@@ -1,11 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEditor.SceneManagement;
 
+namespace UnityEngine.AI{
 public class GenerateMazeChunk : MonoBehaviour
 {
     public GameObject cube;
+    public GameObject node;
     public GameObject floor;
+    public GameObject test;
     public const int width = 32;
     public const int height = 32;
 
@@ -111,19 +116,26 @@ public class GenerateMazeChunk : MonoBehaviour
         }
 
         GenerateMesh();
+        GameObject o = GameObject.Instantiate(test,new Vector3(20,2,40),Quaternion.identity, gameObject.transform);
+        o.GetComponent<pathing>().self = o;
     }
-
     private void GenerateMesh() {
+        NavMeshSurface xyz = null;
         for (int y = 0; y < height * 2; y++) {
             for (int x = 0; x < width * 2; x++) {
                 if (GetAt(wallMap, x, y, width*2)) {
                     GameObject o = GameObject.Instantiate(floor, new Vector3(transform.localPosition.x + x * 10, 0, transform.localPosition.y + y * 10), Quaternion.identity, gameObject.transform);
                     o.layer = LayerMask.NameToLayer("Ground");
+                    xyz = o.AddComponent<NavMeshSurface>();
+                   
+                    
                 } else {
-                    GameObject.Instantiate(cube, new Vector3(transform.localPosition.x + x * 10, 0, transform.localPosition.y + y * 10), Quaternion.identity, gameObject.transform);
+                    GameObject b = GameObject.Instantiate(cube, new Vector3(transform.localPosition.x + x * 10, 0, transform.localPosition.y + y * 10), Quaternion.identity, gameObject.transform);
                 }
             }
         }
+        xyz.BuildNavMesh();
+        
     }
 
     // Update is called once per frame
@@ -131,4 +143,5 @@ public class GenerateMazeChunk : MonoBehaviour
     {
         
     }
+}
 }

@@ -1,74 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class pathing : MonoBehaviour
 {
-
-    private float radius = 10;
-    private bool matrix;
     private int recalculating = 0;
+    private int absTimer = 0;
     GameObject player;
+    public GameObject self;
     private bool goal = false;
-    private UnityEngine.AI.NavMeshAgent agent;
+    public GameObject target;
+    private Vector3 position;
+    public UnityEngine.AI.NavMeshAgent agent;
+    private Vector3 destination;
     // Start is called before the first frame update
     void Start()
     {   
-        player = GameObject.Find("Cube");
+        player = GameObject.Find("Player");
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-        // getting random numbers to determine the 
-        int[] array = new int[3];
-        array[0] = Random.Range(0,2);
-        array[1] = Random.Range(0,2);
-        //array[2] = Random.Range(-radius,radius+1);
-        array[1] *= -1;
-        //change these variables later
-        int z = (int)player.transform.position[2]/10;
-        int x = (int)player.transform.position[0]/10;
-        int cols = 32;
-        int i = 0;
-
-        if(array[1]<0){
-            //array[1]*=radius;
-        }
-        else{
-            array[1]++;
-            //array[1]*=radius;
-        }
-        if(array[0] == 0){
-            z+=array[1];
-            x+=array[2];
-        }
-        else{
-            x+=array[1];
-            z+=array[2];
-        }
-        //edge cases
-        if(x<0){
-            x = 0;
-        }
-        if(z<0){
-            z = 0;
-        }
-        
-        //while(bool[z*cols+x+i] == 0){
-        //    i++;
-        //}
-        int remainder = (z*cols+x+i)%cols;
-        if(remainder<x){
-            z++;
-            //x = remainder+;
-        }
-       
-        //vector3 position = new vector3(x+5,player.transform.position[1],z+5)
+        position = player.transform.position;
+        agent.destination = player.transform.position;
+        destination = agent.destination;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(recalculating == 30 && goal){
+        Vector3 tgoal = target.transform.position;
+        Vector3 apos = agent.transform.position;
+        if(recalculating == 60 && goal){
             recalculating = -1;
-            agent.destination = player.transform.position;
+            position = player.transform.position;
+        }
+        
+        else if(Vector3.Distance(apos,tgoal)<3){
+            goal = true;
+        }
+        else if(absTimer == 1800){
+            goal = true;
+        }
+        else if(Vector3.Distance(apos,player.transform.position)<10){
+            goal = true;
+        }
+        
+        if(!goal){
+            absTimer++;
         }
         recalculating++;
     }
