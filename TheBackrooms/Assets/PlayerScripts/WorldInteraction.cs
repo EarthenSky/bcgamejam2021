@@ -38,6 +38,7 @@ public class WorldInteraction : MonoBehaviour
                     inv.inventory.addItem(new Item(item.item));
                     Destroy(interactedObject.gameObject);
                 }
+                
                 //have text appear above item saying "press f to pickup"
                 //wait for f to be pressed and add to inventory
             }

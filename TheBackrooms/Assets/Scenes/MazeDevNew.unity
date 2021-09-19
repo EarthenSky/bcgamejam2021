@@ -258,10 +258,20 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -0.62
       objectReference: {fileID: 0}
+    - target: {fileID: 2838403396927901281, guid: af2f6a700117bc24887503ef0c561a07,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2838403396927901281, guid: af2f6a700117bc24887503ef0c561a07,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2838403396927901282, guid: af2f6a700117bc24887503ef0c561a07,
         type: 3}
       propertyPath: playerSpeed
-      value: 30
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2838403396927901283, guid: af2f6a700117bc24887503ef0c561a07,
         type: 3}
@@ -278,6 +288,12 @@ PrefabInstance:
       propertyPath: fallMultiplier
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2838403396927901286, guid: af2f6a700117bc24887503ef0c561a07,
+        type: 3}
+      propertyPath: dead
+      value: 
+      objectReference: {fileID: 21300000, guid: 29017b808b0d55d44b6f2bce0b3eb1ac,
+        type: 3}
     - target: {fileID: 2838403396927901286, guid: af2f6a700117bc24887503ef0c561a07,
         type: 3}
       propertyPath: pushAwayStrength

@@ -16,7 +16,10 @@ namespace UnityEngine.AI {
         public GameObject ceilingLight;
         GameObject spectre;
         
+        public GameObject meat;
 
+        public GameObject table;
+        public GameObject chair;
         public NavMeshSurface surf = null;
 
         public GameObject node;
@@ -214,6 +217,21 @@ namespace UnityEngine.AI {
                         // TODO: do in-a-row walls for performance...
                         GameObject obj = GameObject.Instantiate(floor, new Vector3(transform.localPosition.x + x * 5, 0, transform.localPosition.z + y * 5), Quaternion.identity, groundTiles.transform);
                         obj.layer = LayerMask.NameToLayer("Ground");
+
+                        var r = Random.Range(0, 10);
+                        if (r <= 0) {
+                            GameObject.Instantiate(table, new Vector3(transform.localPosition.x + x * 5 + Random.Range(-2f, 2f), 1.5f, transform.localPosition.z + y * 5 + Random.Range(-2f, 2f)), Quaternion.identity, gameObject.transform);
+                        } else if (r <= 1) {
+                            GameObject.Instantiate(chair, new Vector3(transform.localPosition.x + x * 5 + Random.Range(-2f, 2f), 1.5f, transform.localPosition.z + y * 5 + Random.Range(-2f, 2f)), Quaternion.identity, gameObject.transform);
+                        }
+                        r = Random.Range(0, 10);
+
+                        if (r == 0) {
+                            int num = Random.Range(1, 2);   
+                            for (int i = 0; i < num; i++) {
+                                GameObject.Instantiate(meat, new Vector3(transform.localPosition.x + x * 5 + Random.Range(-2.5f, 2.5f), 1.5f, transform.localPosition.z + y * 5 + Random.Range(-2.5f, 2.5f)), Quaternion.identity, gameObject.transform);
+                            }
+                        }
 
                         // spread out nodes
                         if(counter == width*height/20){

@@ -89,14 +89,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f771a99531660e40bb699f55669564c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  node: {fileID: 8312413308959350680, guid: 714037bd137a0bd4b947a969ef40df76, type: 3}
-  test: {fileID: 4206069378733702904, guid: 50a806272a89f31469382115aeed32ce, type: 3}
   wallMat: {fileID: 2100000, guid: b2c5631b1565a834abb7b6ff244215fe, type: 2}
   cube: {fileID: 9209745160833922319, guid: 46a6c8ae4a3a65c4382a18d166ebd654, type: 3}
   floor: {fileID: 7312844684267596175, guid: 675eab53336f0e6488bcde602470bde7, type: 3}
   ceiling: {fileID: 1676498062310916447, guid: 41a2c39fe0fe1004eb25f8cd1764a947, type: 3}
   ceilingLight: {fileID: 5939906431240310159, guid: 809204d9181de8949bed7c7e11a3d35e,
     type: 3}
-  myGeom: {fileID: 0}
+  meat: {fileID: 8530605473998601529, guid: d8fc327621838a74c8ff814e3436c121, type: 3}
+  table: {fileID: 1604941718015805716, guid: bd9cdfbe4daab25439ddccc9ba2078c5, type: 3}
+  chair: {fileID: 5382908374774850713, guid: 81a054a72c69ffc4293af2deaef5d133, type: 3}
+  surf: {fileID: 0}
+  node: {fileID: 8312413308959350680, guid: 714037bd137a0bd4b947a969ef40df76, type: 3}
   wallMap: 
   ceilingRotationMap: 

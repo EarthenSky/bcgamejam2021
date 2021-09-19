@@ -143,13 +143,8 @@ public class PlayerStats : MonoBehaviour
                     break;
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.T)) {
-            TakeDamage();
-        }
     }
 
-    
     public void OnCollisionEnter(Collision other) {
         Debug.Log(other.gameObject.tag);
         if (other.gameObject.tag == ("Enemy")) {
@@ -160,7 +155,8 @@ public class PlayerStats : MonoBehaviour
             } 
 
             Vector3 difference = other.gameObject.transform.position - transform.position;
-            other.gameObject.GetComponent<Rigidbody>().AddForce(difference * pushAwayStrength, ForceMode.Impulse);
+            if (other.gameObject.GetComponent<Rigidbody>() != null)
+                other.gameObject.GetComponent<Rigidbody>().AddForce(difference * pushAwayStrength, ForceMode.Impulse);
             other.gameObject.GetComponent<pathing>().SetWait(8f);
 
         }
