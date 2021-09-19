@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Data.Common;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -14,8 +15,8 @@ public class GenerateMazeChunk : MonoBehaviour
 
     public Mesh myGeom;
 
-    public const int width = 16;
-    public const int height = 16;
+    public const int width = 8;
+    public const int height = 8;
 
     public List<bool> wallMap = new List<bool>();
     public List<int> ceilingRotationMap = new List<int>();
@@ -53,7 +54,7 @@ public class GenerateMazeChunk : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        var trueSeed = Mathf.FloorToInt(Mathf.PerlinNoise((transform.position.x + 1000) / 1217.7f, (transform.position.z + 1201) / 1037.9f) * int.MaxValue);
+        var trueSeed = Mathf.FloorToInt(Mathf.PerlinNoise((transform.position.x + 1000) / 5217.7f, (transform.position.z + 1201) / 5037.9f) * int.MaxValue);
         Random.InitState(trueSeed);
         List<float> map = new List<float>();
         for (int y = 0; y < height; y++) {
@@ -83,13 +84,13 @@ public class GenerateMazeChunk : MonoBehaviour
             ceilingRotationMap.Add(Random.Range(0, 24));
         }
 
-        List<(int, int)> frontier = new List<(int, int)>();
-        frontier.Add((startX, startY));
+        List<(int, int, float)> frontier = new List<(int, int, float)>();
+        frontier.Add((startX, startY, 0f));
 
         while (frontier.Count != 0) {
             // TODO: this sort is inefficient...
-            frontier.Sort((a, b) => GetAt(map, a.Item1, a.Item2).CompareTo(GetAt(map, b.Item1, b.Item2)));
-            (int, int) current = frontier[frontier.Count-1];
+            frontier.Sort((a, b) => a.Item3.CompareTo(b.Item3));
+            (int, int) current = (frontier[frontier.Count-1].Item1, frontier[frontier.Count-1].Item2);
             frontier.RemoveAt(frontier.Count-1);
 
             // add to the actual map of walls & floors.
@@ -116,22 +117,22 @@ public class GenerateMazeChunk : MonoBehaviour
             // add adjacent objects.
             if (InMap(current.Item1 - 1, current.Item2) && GetAt(set, current.Item1 - 1, current.Item2) == false) {
                 SetAt(set, current.Item1 - 1, current.Item2, true);
-                frontier.Add((current.Item1 - 1, current.Item2));
+                frontier.Add((current.Item1 - 1, current.Item2, GetAt(map, current.Item1 - 1, current.Item2)));
             }
 
             if (InMap(current.Item1 + 1, current.Item2) && GetAt(set, current.Item1 + 1, current.Item2) == false) {
                 SetAt(set, current.Item1 + 1, current.Item2, true);
-                frontier.Add((current.Item1 + 1, current.Item2));
+                frontier.Add((current.Item1 + 1, current.Item2, GetAt(map, current.Item1 + 1, current.Item2)));
             }
 
             if (InMap(current.Item1, current.Item2 - 1) && GetAt(set, current.Item1, current.Item2 -1) == false) {
                 SetAt(set, current.Item1, current.Item2 - 1, true);
-                frontier.Add((current.Item1, current.Item2 - 1));
+                frontier.Add((current.Item1, current.Item2 - 1, GetAt(map, current.Item1, current.Item2 - 1)));
             }
 
             if (InMap(current.Item1, current.Item2 + 1) && GetAt(set, current.Item1, current.Item2 + 1) == false) {
                 SetAt(set, current.Item1, current.Item2 + 1, true);
-                frontier.Add((current.Item1, current.Item2 + 1));
+                frontier.Add((current.Item1, current.Item2 + 1, GetAt(map, current.Item1, current.Item2 + 1)));
             }
         }
 

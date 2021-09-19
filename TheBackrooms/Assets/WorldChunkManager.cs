@@ -6,7 +6,7 @@ public class WorldChunkManager : MonoBehaviour
 {
     int lastChunkX = 0;
     int lastChunkY = 0;
-    int chunkSize = 16;
+    int chunkSize = 8;
     public GameObject chunk; // prefab
 
     public GameObject chunkA;
