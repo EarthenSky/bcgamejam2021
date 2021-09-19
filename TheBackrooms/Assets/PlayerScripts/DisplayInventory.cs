@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class DisplayInventory : MonoBehaviour
 {
+    public GameObject canvas;
     public GameObject inventoryPrefab;
     public InventoryObject inventory;
     public int X_START;
@@ -12,29 +13,32 @@ public class DisplayInventory : MonoBehaviour
     public int X_SPACE_BETWEEN_ITEMS;
     public int NUMBER_OF_COLUMNS;
     public int Y_SPACE_BETWEEN_ITEMS;
-    Dictionary<InventorySlot, GameObject> itemsDisplayed = new Dictionary<InventorySlot, GameObject>();
+    Dictionary<GameObject, InventorySlot> itemsDisplayed = new Dictionary<GameObject, InventorySlot >();
 
 
     // Start is called before the first frame update
     void Start()
     {
-        createDisplay();
+        createSlots();
     }
 
     // Update is called once per frame
     void Update()
     {
-        updateDisplay();
+        
     }
 
-    public void createDisplay() {
-        for (int i = 0; i < inventory.container.Items.Count; i++) {
-            InventorySlot slot = inventory.container.Items[i];
+    public void createSlots() {
+
+        itemsDisplayed = new Dictionary<GameObject, InventorySlot>();
+        for (int i = 0; i < inventory.container.Items.Length; i++)
+        {
             var obj = Instantiate(inventoryPrefab, Vector3.zero, Quaternion.identity, transform);
-            obj.transform.GetChild(0).GetComponentInChildren<Image>().sprite = inventory.database.getItem[slot.ID].uiDisplay;
             obj.GetComponent<RectTransform>().localPosition = getPosition(i);
-            itemsDisplayed.Add(slot, obj);
+            obj.transform.localRotation = Quaternion.identity;
+            itemsDisplayed.Add(obj, inventory.container.Items[i]);
         }
+
     }
 
     public Vector3 getPosition(int i) {
@@ -42,15 +46,6 @@ public class DisplayInventory : MonoBehaviour
     }
 
     public void updateDisplay() {
-        for (int i = 0; i < inventory.container.Items.Count; i++) {
-            InventorySlot slot = inventory.container.Items[i];
-            if (!itemsDisplayed.ContainsKey(inventory.container.Items[i])) {
-                var obj = Instantiate(inventoryPrefab, Vector3.zero, Quaternion.identity, transform);
-                obj.transform.GetChild(0).GetComponentInChildren<Image>().sprite = inventory.database.getItem[slot.ID].uiDisplay;
-                obj.GetComponent<RectTransform>().localPosition = getPosition(i);
-                itemsDisplayed.Add(slot, obj);
-            }
-
-        }
+        
     }
 }

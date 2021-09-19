@@ -11,13 +11,25 @@ public class InventoryObject : ScriptableObject
 
     public void addItem(Item _item) {
 
-        InventorySlot itemSlot = new InventorySlot(_item.Id,_item);
-        container.Items.Add(itemSlot);
+        
+        
         
     }
 
+    public InventorySlot setEmptySlot(Item _item) {
+        for (int i = 0; i < container.Items.Length; i++)
+        {
+            if (container.Items[i].ID <= -1) {
+                container.Items[i].updateSlot(_item.Id,_item);
+                return container.Items[i];
+            }
+            
+        }
+        return null;
+    }
+
     public void clearInv() {
-        container.Items.Clear();
+        container.Items = new InventorySlot[20];
     }
 
   
@@ -26,9 +38,15 @@ public class InventoryObject : ScriptableObject
 
 [System.Serializable]
 public class InventorySlot {
-    public int ID;
+    public int ID = -1;
     public Item item;
     //TODO: ADD (slotsize)
+    public InventorySlot()
+    {
+        item = null;
+        ID = -1;
+
+    }
 
     public InventorySlot(int _id, Item _item) {
         item = _item;
@@ -36,10 +54,17 @@ public class InventorySlot {
         
     }
 
+    public void updateSlot(int _id, Item _item)
+    {
+        item = _item;
+        ID = _id;
+
+    }
+
 }
 
 [System.Serializable]
 public class Inventory {
-    public List<InventorySlot> Items = new List<InventorySlot>();
+    public InventorySlot[] Items = new InventorySlot[20];
 
 }
