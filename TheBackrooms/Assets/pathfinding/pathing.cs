@@ -5,15 +5,15 @@ using UnityEngine.AI;
 
 public class pathing : MonoBehaviour
 {
-    private int recalculating = 0;
+    public int recalculating = 0;
     private int absTimer = 0;
     GameObject player;
     public GameObject self;
-    private bool goal = false;
+    public bool goal = false;
     public GameObject target;
-    private Vector3 position;
+    public Vector3 position;
     public UnityEngine.AI.NavMeshAgent agent;
-    private Vector3 destination;
+    public Vector3 destination;
     // Start is called before the first frame update
     void Start()
     {   
