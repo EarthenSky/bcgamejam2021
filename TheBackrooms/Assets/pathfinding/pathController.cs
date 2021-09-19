@@ -9,10 +9,10 @@ public class pathController : MonoBehaviour
     public GameObject enemy,node;
     public int hardLimit = 210;
     public int limit = 30;
-    private int current = 0, trueCurrent = 0;
+    public int current = 0, trueCurrent = 0;
     public List<GameObject> pool;
 
-    public int hardEnemyLimit = 100;
+    private int hardEnemyLimit = 100;
     public int enemyLimit = 20;
     public int enemyCount = 0,trueEnemyCount, downTime = 45, counter = 0;
     
@@ -36,12 +36,19 @@ public class pathController : MonoBehaviour
                 current++;
                 trueCurrent++;
             }
-            else if (counter >= downTime && enemyCount < enemyLimit && trueEnemyCount < hardEnemyLimit){
+
+            if (counter == downTime && enemyCount < enemyLimit && vectors.Count>0 && hardEnemyLimit>trueEnemyCount){
                 counter =- 1;
                 spawn();
             }
 
             counter++;
+            if(pool.Count>0){
+                for(int i = 0; i<pool.Count; i++){
+                    pool[i].SetActive(true);
+                }
+                pool.Clear();
+            }
         }
     }
 

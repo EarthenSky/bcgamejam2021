@@ -192,6 +192,12 @@ namespace UnityEngine.AI {
         
         private void GenerateMesh() {
             int counter = 0;
+            pathController.GetComponent<pathController>().allTiles.Clear();
+            pathController.GetComponent<pathController>().vectors.Clear();
+            pathController.GetComponent<pathController>().current = 0;
+            pathController.GetComponent<pathController>().vectors.Clear();
+            pathController.GetComponent<pathController>().enemyCount = 0;
+
 
             GameObject groundTiles = new GameObject("groundTiles");
             GameObject ceilingList = new GameObject("ceilingList");
@@ -208,8 +214,8 @@ namespace UnityEngine.AI {
 
                         // spread out nodes
                         if(counter == width*height/20){
-                            pathController.GetComponent<pathController>().allTiles.Add(new Vector3(x*5,obj.transform.position[1]-1,y*5));
-                            pathController.GetComponent<pathController>().vectors.Add(new Vector3(x*5,obj.transform.position[1]+2,y*5));
+                            pathController.GetComponent<pathController>().allTiles.Add(new Vector3(transform.localPosition.x+x*5,obj.transform.position[1]-1,transform.localPosition.z +y*5));
+                            pathController.GetComponent<pathController>().vectors.Add(new Vector3(transform.localPosition.x+x*5,obj.transform.position[1]+2,transform.localPosition.z+y*5));
                             counter = 0;
                         }
                         counter++;

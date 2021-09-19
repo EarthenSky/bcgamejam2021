@@ -11,15 +11,13 @@ public class pathing : MonoBehaviour
     public GameObject self;
     public bool goal = false;
     public GameObject target;
-    public Vector3 position;
-    public UnityEngine.AI.NavMeshAgent agent;
-    public Vector3 destination;
+    public NavMeshAgent agent;
     // Start is called before the first frame update
     void Start()
     {   
         player = GameObject.Find("Player");
         agent = self.GetComponent<NavMeshAgent>();
-        agent.destination = target.transform.position;
+        agent.destination = player.transform.position;
     }
 
     // Update is called once per frame
@@ -32,7 +30,7 @@ public class pathing : MonoBehaviour
             agent.destination = player.transform.position;
         }
         
-        else if(Vector3.Distance(apos,tgoal)<10){
+        else if(Vector3.Distance(apos,tgoal)<7){
             goal = true;
         }
         else if(absTimer >= 1800){
