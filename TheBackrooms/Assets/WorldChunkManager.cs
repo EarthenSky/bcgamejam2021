@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class WorldChunkManager : MonoBehaviour
 {
+    int originSeed;
     int lastChunkX = 0;
     int lastChunkY = 0;
     int chunkSize = 8;
@@ -21,6 +22,8 @@ public class WorldChunkManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        originSeed = Random.Range(1, 1000);
+
         player = GameObject.Find("Player");
         chunkA = GameObject.Instantiate(chunk, new Vector3(0, 0, 0), Quaternion.identity, transform);
         
