@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class WorldChunkManager : MonoBehaviour
 {
+    int originSeed;
     int lastChunkX = 0;
     int lastChunkY = 0;
     int chunkSize = 8;
@@ -21,6 +22,8 @@ public class WorldChunkManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        originSeed = Random.Range(1, 1000);
+
         player = GameObject.Find("Player");
         chunkA = GameObject.Instantiate(chunk, new Vector3(0, 0, 0), Quaternion.identity, transform);
         
@@ -29,8 +32,9 @@ public class WorldChunkManager : MonoBehaviour
         chunkS = GameObject.Instantiate(chunk, new Vector3(0, 0, -2 * chunkSize * 5), Quaternion.identity, transform);
         chunkW = GameObject.Instantiate(chunk, new Vector3(-2 * chunkSize * 5, 0, 0), Quaternion.identity, transform);
         
-        //var surf = chunkA.GetComponentInChildren<NavMeshSurface>();
-        //var surf = chunkA.GetComponent<NavMeshSurface>();
+        var surf = gameObject.AddComponent<NavMeshSurface>();
+        surf.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
+        surf.BuildNavMesh();
     }
 
     // Update is called once per frame
@@ -38,7 +42,6 @@ public class WorldChunkManager : MonoBehaviour
     {
         int chunkX = Mathf.FloorToInt((player.transform.position.x + transform.position.x)/ 5 / (2*chunkSize));
         int chunkY = Mathf.FloorToInt((player.transform.position.z + transform.position.z)/ 5 / (2*chunkSize));
-        //Debug.Log((lastChunkX, lastChunkY, chunkX, chunkY));
         if (lastChunkX != chunkX || lastChunkY != chunkY) {
             if (chunkX > lastChunkX) { // E
                 Destroy(chunkN);
@@ -86,9 +89,10 @@ public class WorldChunkManager : MonoBehaviour
                 chunkW = GameObject.Instantiate(chunk, new Vector3((chunkX-1) * 2*chunkSize * 5, 0, chunkY * 2*chunkSize * 5), Quaternion.identity, transform);
             }
 
-            //chunkA.GetComponent<NavMeshSurface>();
-            //var surf = chunkA.GetComponentInChildren<NavMeshSurface>();
-            //surf.BuildNavMesh();
+            //NavMesh.RemoveAllNavMeshData();
+            var surf = gameObject.GetComponent<NavMeshSurface>();
+            surf.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
+            surf.BuildNavMesh();
                         
             lastChunkX = chunkX;
             lastChunkY = chunkY;

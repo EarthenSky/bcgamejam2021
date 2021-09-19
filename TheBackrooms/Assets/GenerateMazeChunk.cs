@@ -59,7 +59,7 @@ namespace UnityEngine.AI {
         }
 
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             pathController = GameObject.Find("EnemyController");
 
@@ -200,11 +200,11 @@ namespace UnityEngine.AI {
 
             for (int y = 0; y < height * 2; y++) {
                 for (int x = 0; x < width * 2; x++) {
+                    //int lastn = 0;
                     if (GetAt(wallMap, x, y, width*2)) {
                         // TODO: do in-a-row walls for performance...
                         GameObject obj = GameObject.Instantiate(floor, new Vector3(transform.localPosition.x + x * 5, 0, transform.localPosition.z + y * 5), Quaternion.identity, groundTiles.transform);
                         obj.layer = LayerMask.NameToLayer("Ground");
-                        surf = obj.AddComponent<NavMeshSurface>();
 
                         // spread out nodes
                         if(counter == width*height/20){
@@ -236,7 +236,6 @@ namespace UnityEngine.AI {
             }
             
             pathController.GetComponent<pathController>().finished = true;
-            surf.BuildNavMesh();
         }
 
         // Update is called once per frame
