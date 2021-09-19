@@ -190,6 +190,7 @@ public class GenerateMazeChunk : MonoBehaviour
         for (int y = 0; y < height * 2; y++) {
             for (int x = 0; x < width * 2; x++) {
                 if (GetAt(wallMap, x, y, width*2)) {
+                    // TODO: do in-a-row walls for performance...
                     GameObject o = GameObject.Instantiate(floor, new Vector3(transform.localPosition.x + x * 5, 0, transform.localPosition.z + y * 5), Quaternion.identity, groundTiles.transform);
                     o.layer = LayerMask.NameToLayer("Ground");
                 } else {
