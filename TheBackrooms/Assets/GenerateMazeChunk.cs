@@ -14,6 +14,8 @@ namespace UnityEngine.AI {
         public GameObject floor;
         public GameObject ceiling;
         public GameObject ceilingLight;
+        GameObject spectre;
+        
 
         public NavMeshSurface surf = null;
 
@@ -192,10 +194,11 @@ namespace UnityEngine.AI {
         
         private void GenerateMesh() {
             int counter = 0;
+            pathController.GetComponent<pathController>().allTiles.Add(new Vector3(0,0,0));
+            pathController.GetComponent<pathController>().vectors.Add(new Vector3(0,0,0));
             pathController.GetComponent<pathController>().allTiles.Clear();
             pathController.GetComponent<pathController>().vectors.Clear();
             pathController.GetComponent<pathController>().current = 0;
-            pathController.GetComponent<pathController>().vectors.Clear();
             pathController.GetComponent<pathController>().enemyCount = 0;
 
 
@@ -240,7 +243,8 @@ namespace UnityEngine.AI {
                     }
                 }
             }
-            
+
+            pathController.GetComponent<pathController>().spawnSpectre = true;
             pathController.GetComponent<pathController>().finished = true;
         }
 

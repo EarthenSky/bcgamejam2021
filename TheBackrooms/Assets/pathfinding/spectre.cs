@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 public class spectre : MonoBehaviour
 {   
-    public GameObject spect;
     private NavMeshAgent agent;
     GameObject player;
     public GameObject self;
