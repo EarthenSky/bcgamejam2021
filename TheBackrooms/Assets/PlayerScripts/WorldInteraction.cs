@@ -35,7 +35,7 @@ public class WorldInteraction : MonoBehaviour
 
                 if (Input.GetKey(KeyCode.F))
                 {
-                    //inv.inventory.addItem(new Item(item.item));
+                    inv.inventory.addItem(new Item(item.item));
                     Destroy(interactedObject.gameObject);
                 }
                 //have text appear above item saying "press f to pickup"
