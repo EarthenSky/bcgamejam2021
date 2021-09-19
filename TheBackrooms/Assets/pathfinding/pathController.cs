@@ -7,16 +7,17 @@ public class pathController : MonoBehaviour
     public bool finished = false;
     private GameObject player;
     public GameObject enemy,node;
-
+    public int hardLimit = 210;
     public int limit = 30;
     public int current = 0;
-    public int enemyLimit = 10;
+    public int hardEnemyLimit = 200;
+    public int enemyLimit = 20;
     public int enemyCount = 0, downTime = 45, counter = 0;
     
     public List<GameObject> squares;
     public List<Vector3> vectors;
     public List<Vector3> allTiles;
-    private int VectorIndex = 0, allIndex = 0, squaresIndex;
+    private int VectorIndex = 0, allIndex = 0, squaresIndex = 0;
 
     // Start is called before the first frame update
     void Start() {
@@ -32,11 +33,10 @@ public class pathController : MonoBehaviour
                 createNode();
                 current++;
             }
-
-            if (counter == downTime && enemyCount < enemyLimit && vectors.Count>0){
+            else if (counter >= downTime && enemyCount < enemyLimit){
                 counter =- 1;
                 spawn();
-                enemyCount++;
+                
             }
 
             counter++;
@@ -48,16 +48,23 @@ public class pathController : MonoBehaviour
         GameObject o = GameObject.Instantiate(node,v,Quaternion.identity, gameObject.transform);
         o.GetComponent<MeshRenderer>().enabled = false;
         squares.Add(o);
-        allIndex++;
+        allIndex+=5;
+        allIndex = allIndex%allTiles.Count;
     }
 
     public void spawn(){
         Vector3 v = vectors[VectorIndex];
+        VectorIndex++;
         if(Vector3.Distance(v,player.transform.position)>30){
             GameObject o = GameObject.Instantiate(enemy,v,Quaternion.identity, gameObject.transform);
             o.GetComponent<pathing>().target = squares[squaresIndex];
             o.GetComponent<pathing>().self = o;
             squaresIndex++;
+            
+            enemyCount++;
+            if(VectorIndex>= vectors.Count){
+                VectorIndex= 0;
+            }
             if(squaresIndex>=squares.Count){
                 squaresIndex = 0;
             }

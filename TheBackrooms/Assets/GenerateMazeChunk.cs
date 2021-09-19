@@ -208,8 +208,8 @@ namespace UnityEngine.AI {
 
                         // spread out nodes
                         if(counter == width*height/20){
-                            pathController.GetComponent<pathController>().allTiles.Add(new Vector3(x*5,-2,y*5));
-                            pathController.GetComponent<pathController>().vectors.Add(new Vector3(x*5,2,y*5));
+                            pathController.GetComponent<pathController>().allTiles.Add(new Vector3(x*5,obj.transform.position[1]-2,y*5));
+                            pathController.GetComponent<pathController>().vectors.Add(new Vector3(x*5,obj.transform.position[1]+2,y*5));
                             counter = 0;
                         }
                         counter++;
