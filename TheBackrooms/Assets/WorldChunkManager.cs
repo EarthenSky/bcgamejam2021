@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class WorldChunkManager : MonoBehaviour
 {
@@ -27,6 +28,9 @@ public class WorldChunkManager : MonoBehaviour
         chunkE = GameObject.Instantiate(chunk, new Vector3(2 * chunkSize * 5, 0, 0), Quaternion.identity, transform);
         chunkS = GameObject.Instantiate(chunk, new Vector3(0, 0, -2 * chunkSize * 5), Quaternion.identity, transform);
         chunkW = GameObject.Instantiate(chunk, new Vector3(-2 * chunkSize * 5, 0, 0), Quaternion.identity, transform);
+        
+        //var surf = chunkA.GetComponentInChildren<NavMeshSurface>();
+        //var surf = chunkA.GetComponent<NavMeshSurface>();
     }
 
     // Update is called once per frame
@@ -81,6 +85,10 @@ public class WorldChunkManager : MonoBehaviour
                 chunkS = GameObject.Instantiate(chunk, new Vector3(chunkX * 2*chunkSize * 5, 0, (chunkY-1) * 2*chunkSize * 5), Quaternion.identity, transform);
                 chunkW = GameObject.Instantiate(chunk, new Vector3((chunkX-1) * 2*chunkSize * 5, 0, chunkY * 2*chunkSize * 5), Quaternion.identity, transform);
             }
+
+            //chunkA.GetComponent<NavMeshSurface>();
+            //var surf = chunkA.GetComponentInChildren<NavMeshSurface>();
+            //surf.BuildNavMesh();
                         
             lastChunkX = chunkX;
             lastChunkY = chunkY;

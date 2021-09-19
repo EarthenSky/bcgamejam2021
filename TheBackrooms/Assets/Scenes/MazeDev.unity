@@ -152,7 +152,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -486,6 +486,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d684311b2c2930b4c8324e7b2f9e7692, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  finished: 0
   player: {fileID: 223792702}
   enemy: {fileID: 4206069378733702904, guid: 50a806272a89f31469382115aeed32ce, type: 3}
   node: {fileID: 8312413308959350680, guid: 714037bd137a0bd4b947a969ef40df76, type: 3}
@@ -541,12 +542,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f771a99531660e40bb699f55669564c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cube: {fileID: 9209745160833922319, guid: 46a6c8ae4a3a65c4382a18d166ebd654, type: 3}
   pathController: {fileID: 858033097}
   node: {fileID: 8312413308959350680, guid: 714037bd137a0bd4b947a969ef40df76, type: 3}
-  floor: {fileID: 7312844684267596175, guid: 675eab53336f0e6488bcde602470bde7, type: 3}
   test: {fileID: 4206069378733702904, guid: 50a806272a89f31469382115aeed32ce, type: 3}
+  wallMat: {fileID: 0}
+  cube: {fileID: 9209745160833922319, guid: 46a6c8ae4a3a65c4382a18d166ebd654, type: 3}
+  floor: {fileID: 7312844684267596175, guid: 675eab53336f0e6488bcde602470bde7, type: 3}
+  ceiling: {fileID: 1676498062310916447, guid: 41a2c39fe0fe1004eb25f8cd1764a947, type: 3}
+  ceilingLight: {fileID: 5939906431240310159, guid: 809204d9181de8949bed7c7e11a3d35e,
+    type: 3}
+  myGeom: {fileID: 0}
   wallMap: 
+  ceilingRotationMap: 
 --- !u!4 &1786983369
 Transform:
   m_ObjectHideFlags: 0

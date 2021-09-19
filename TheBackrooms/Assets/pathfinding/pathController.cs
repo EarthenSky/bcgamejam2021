@@ -5,45 +5,52 @@ using UnityEngine;
 public class pathController : MonoBehaviour
 {
     public bool finished = false;
-    public GameObject player,enemy,node;
+    private GameObject player;
+    public GameObject enemy,node;
+
     public int limit = 30;
     public int current = 0;
     public int enemyLimit = 10;
     public int enemyCount = 0, downTime = 45, counter = 0;
+    
     public List<GameObject> squares;
     public List<Vector3> vectors;
     public List<Vector3> allTiles;
     private int VectorIndex = 0, allIndex = 0, squaresIndex;
+
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
+        player = GameObject.Find("Player");
         Shuffle(allTiles);        
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if(finished){
-            if(limit>current ){
+    void Update() {
+        // only do this after we're done generating the chunk.
+        if(finished) {
+            if (limit > current) {
                 createNode();
                 current++;
             }
-            if(counter == downTime && enemyCount<enemyLimit && vectors.Count>0){
-                counter =-1;
+
+            if (counter == downTime && enemyCount < enemyLimit && vectors.Count>0){
+                counter =- 1;
                 spawn();
                 enemyCount++;
             }
+
             counter++;
         }
     }
-    public void createNode(){
+
+    public void createNode() {
         Vector3 v = allTiles[allIndex];
         GameObject o = GameObject.Instantiate(node,v,Quaternion.identity, gameObject.transform);
         o.GetComponent<MeshRenderer>().enabled = false;
         squares.Add(o);
         allIndex++;
-
     }
+
     public void spawn(){
         Vector3 v = vectors[VectorIndex];
         if(Vector3.Distance(v,player.transform.position)>30){
@@ -56,6 +63,8 @@ public class pathController : MonoBehaviour
             }
         }
     }
+
+    // TODO: this is duplicate
     public void Shuffle(List<Vector3> list)  
     {  
         int n = list.Count;  

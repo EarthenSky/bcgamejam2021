@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -152,7 +152,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -306,9 +306,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f771a99531660e40bb699f55669564c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pathController: {fileID: 0}
+  node: {fileID: 0}
+  test: {fileID: 0}
+  wallMat: {fileID: 0}
   cube: {fileID: 9209745160833922319, guid: 46a6c8ae4a3a65c4382a18d166ebd654, type: 3}
   floor: {fileID: 7312844684267596175, guid: 675eab53336f0e6488bcde602470bde7, type: 3}
+  ceiling: {fileID: 0}
+  ceilingLight: {fileID: 0}
+  myGeom: {fileID: 0}
   wallMap: 
+  ceilingRotationMap: 
 --- !u!4 &155670450
 Transform:
   m_ObjectHideFlags: 0
@@ -1005,8 +1013,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 588c1e3fc6a3fe94899f4f6549e02c55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryPrefab: {fileID: 4368865737086009415, guid: 1ffd025aa1aea664295d301ec20a79c8,
-    type: 3}
+  canvas: {fileID: 0}
+  inventoryPrefab: {fileID: 0}
   inventory: {fileID: 11400000, guid: badd6fab9df6b474d9a1b557fcf0308d, type: 2}
   X_START: -90
   Y_START: 121

@@ -89,6 +89,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f771a99531660e40bb699f55669564c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  node: {fileID: 8312413308959350680, guid: 714037bd137a0bd4b947a969ef40df76, type: 3}
+  test: {fileID: 4206069378733702904, guid: 50a806272a89f31469382115aeed32ce, type: 3}
   wallMat: {fileID: 2100000, guid: b2c5631b1565a834abb7b6ff244215fe, type: 2}
   cube: {fileID: 9209745160833922319, guid: 46a6c8ae4a3a65c4382a18d166ebd654, type: 3}
   floor: {fileID: 7312844684267596175, guid: 675eab53336f0e6488bcde602470bde7, type: 3}

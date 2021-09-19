@@ -8,10 +8,6 @@ using UnityEditor.SceneManagement;
 namespace UnityEngine.AI {
     public class GenerateMazeChunk : MonoBehaviour
     {
-        public GameObject pathController;
-        public GameObject node;
-        public GameObject test;
-
         public Material wallMat;
 
         public GameObject cube;
@@ -19,7 +15,12 @@ namespace UnityEngine.AI {
         public GameObject ceiling;
         public GameObject ceilingLight;
 
-        public Mesh myGeom;
+        public NavMeshSurface surf = null;
+
+        public GameObject node;
+        private GameObject pathController;
+
+        //public Mesh myGeom;
 
         public const int width = 8;
         public const int height = 8;
@@ -60,6 +61,8 @@ namespace UnityEngine.AI {
         // Start is called before the first frame update
         void Start()
         {
+            pathController = GameObject.Find("EnemyController");
+
             var trueSeed = Mathf.FloorToInt(Mathf.PerlinNoise((transform.position.x + 1000) / 5217.7f, (transform.position.z + 1201) / 5037.9f) * int.MaxValue);
             Random.InitState(trueSeed);
             List<float> map = new List<float>();
@@ -186,29 +189,30 @@ namespace UnityEngine.AI {
 
             GenerateMesh();
         }
+        
         private void GenerateMesh() {
-            NavMeshSurface xyz = null;
             int counter = 0;
 
             GameObject groundTiles = new GameObject("groundTiles");
-            groundTiles.transform.parent = transform;
             GameObject ceilingList = new GameObject("ceilingList");
+            groundTiles.transform.parent = transform;
             ceilingList.transform.parent = transform;
 
             for (int y = 0; y < height * 2; y++) {
                 for (int x = 0; x < width * 2; x++) {
                     if (GetAt(wallMap, x, y, width*2)) {
                         // TODO: do in-a-row walls for performance...
-                        GameObject o = GameObject.Instantiate(floor, new Vector3(transform.localPosition.x + x * 5, 0, transform.localPosition.z + y * 5), Quaternion.identity, groundTiles.transform);
-                        o.layer = LayerMask.NameToLayer("Ground");
-                        xyz = o.AddComponent<NavMeshSurface>();
-                    
+                        GameObject obj = GameObject.Instantiate(floor, new Vector3(transform.localPosition.x + x * 5, 0, transform.localPosition.z + y * 5), Quaternion.identity, groundTiles.transform);
+                        obj.layer = LayerMask.NameToLayer("Ground");
+                        surf = obj.AddComponent<NavMeshSurface>();
+
+                        // spread out nodes
                         if(counter == width*height/20){
-                            pathController.GetComponent<pathController>().allTiles.Add(new Vector3(x*10,-2,y*10));
+                            pathController.GetComponent<pathController>().allTiles.Add(new Vector3(x*5,-2,y*5));
+                            pathController.GetComponent<pathController>().vectors.Add(new Vector3(x*5,2,y*5));
                             counter = 0;
-                            pathController.GetComponent<pathController>().vectors.Add(new Vector3(x*10,2,y*10));
                         }
-                        counter ++;
+                        counter++;
                         
                     } else {
                         GameObject b = GameObject.Instantiate(cube, new Vector3(transform.localPosition.x + x * 5, 0, transform.localPosition.z + y * 5), Quaternion.identity, groundTiles.transform);
@@ -230,9 +234,9 @@ namespace UnityEngine.AI {
                     }
                 }
             }
-            pathController.GetComponent<pathController>().finished = true;
-            xyz.BuildNavMesh();
             
+            pathController.GetComponent<pathController>().finished = true;
+            surf.BuildNavMesh();
         }
 
         // Update is called once per frame

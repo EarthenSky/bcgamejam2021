@@ -404,11 +404,67 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d769d302e0eefc45ac78de1890b1a02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpForce: 1
+  jumpVelocity: 4
+  fallMultiplier: 2.5
   groundCheck: {fileID: 363015650}
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
+--- !u!1 &939596298
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 939596299}
+  - component: {fileID: 939596300}
+  m_Layer: 0
+  m_Name: EnemyController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &939596299
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939596298}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 33.12863, y: -47.486546, z: -27.559166}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &939596300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939596298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d684311b2c2930b4c8324e7b2f9e7692, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  finished: 0
+  enemy: {fileID: 4206069378733702904, guid: 50a806272a89f31469382115aeed32ce, type: 3}
+  node: {fileID: 8312413308959350680, guid: 714037bd137a0bd4b947a969ef40df76, type: 3}
+  limit: 30
+  current: 0
+  enemyLimit: 10
+  enemyCount: 0
+  downTime: 45
+  counter: 0
+  squares: []
+  vectors: []
+  allTiles: []
 --- !u!1 &1448849836
 GameObject:
   m_ObjectHideFlags: 0

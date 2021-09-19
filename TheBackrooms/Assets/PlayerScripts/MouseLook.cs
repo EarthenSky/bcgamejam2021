@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MouseLook : MonoBehaviour
 {
-    public GameObject player;
+    private GameObject player;
     public Transform cam;
     public float mouseSensitivity = 100f;
 
@@ -12,6 +12,7 @@ public class MouseLook : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.Find("Player");
         Cursor.lockState = CursorLockMode.Locked;
     }
 
