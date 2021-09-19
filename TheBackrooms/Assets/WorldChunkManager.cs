@@ -29,11 +29,9 @@ public class WorldChunkManager : MonoBehaviour
         chunkS = GameObject.Instantiate(chunk, new Vector3(0, 0, -2 * chunkSize * 5), Quaternion.identity, transform);
         chunkW = GameObject.Instantiate(chunk, new Vector3(-2 * chunkSize * 5, 0, 0), Quaternion.identity, transform);
         
-        //var surf = chunkA.GetComponentInChildren<NavMeshSurface>();
-        var surf = chunkA.GetComponent<GenerateMazeChunk>().surf;
-        //Debug.Log(surf);
+        var surf = gameObject.AddComponent<NavMeshSurface>();
+        surf.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
         surf.BuildNavMesh();
-        //NavMesh.AddNavMeshData(data);
     }
 
     // Update is called once per frame
@@ -41,7 +39,6 @@ public class WorldChunkManager : MonoBehaviour
     {
         int chunkX = Mathf.FloorToInt((player.transform.position.x + transform.position.x)/ 5 / (2*chunkSize));
         int chunkY = Mathf.FloorToInt((player.transform.position.z + transform.position.z)/ 5 / (2*chunkSize));
-        //Debug.Log((lastChunkX, lastChunkY, chunkX, chunkY));
         if (lastChunkX != chunkX || lastChunkY != chunkY) {
             if (chunkX > lastChunkX) { // E
                 Destroy(chunkN);
@@ -89,8 +86,9 @@ public class WorldChunkManager : MonoBehaviour
                 chunkW = GameObject.Instantiate(chunk, new Vector3((chunkX-1) * 2*chunkSize * 5, 0, chunkY * 2*chunkSize * 5), Quaternion.identity, transform);
             }
 
-            NavMesh.RemoveAllNavMeshData();
-            var surf = chunkA.GetComponent<GenerateMazeChunk>().surf;
+            //NavMesh.RemoveAllNavMeshData();
+            var surf = gameObject.GetComponent<NavMeshSurface>();
+            surf.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
             surf.BuildNavMesh();
                         
             lastChunkX = chunkX;
