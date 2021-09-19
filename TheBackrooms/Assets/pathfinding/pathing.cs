@@ -27,12 +27,12 @@ public class pathing : MonoBehaviour
     {
         Vector3 tgoal = target.transform.position;
         Vector3 apos = agent.transform.position;
-        if(recalculating == 60 && goal){
+        if(recalculating >= 60 && goal){
             recalculating = -1;
             agent.destination = player.transform.position;
         }
         
-        else if(Vector3.Distance(apos,tgoal)<7){
+        else if(Vector3.Distance(apos,tgoal)<10){
             goal = true;
         }
         else if(absTimer >= 1800){
@@ -41,10 +41,12 @@ public class pathing : MonoBehaviour
         else if(Vector3.Distance(apos,player.transform.position)<10){
             goal = true;
         }
-        
-        if(!goal){
-            absTimer++;
+        if(Vector3.Distance(apos,player.transform.position)>300){
+            self.transform.parent.GetComponent<pathController>().pool.Add(self);
+            self.SetActive(false);
         }
+        
+        absTimer++;
         recalculating++;
     }
 }
