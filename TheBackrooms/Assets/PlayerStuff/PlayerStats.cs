@@ -155,12 +155,13 @@ public class PlayerStats : MonoBehaviour
         if (other.gameObject.tag == ("Enemy")) {
             Debug.Log("Hit");
             if(iTime <= 0) {
-                iTime = 1.5f;
+                iTime = 1f;
                 TakeDamage();
             } 
 
             Vector3 difference = other.gameObject.transform.position - transform.position;
             other.gameObject.GetComponent<Rigidbody>().AddForce(difference * pushAwayStrength, ForceMode.Impulse);
+            other.gameObject.GetComponent<pathing>().SetWait(8f);
 
         }
     }
