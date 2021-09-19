@@ -1,12 +1,10 @@
 # bcgamejam2021
 Our team's game for the 2021 bc game jam
 
-# contributors:
-everyone put your name here
+# How to play
+- Build exists for windows (under `builds/`), user must manually build for mac.
 
-Learning:
-- https://kahncode.com/gitcentral/ for Unreal engine git integration. (Otherwise it’s going to be very painful)
-
+## ---------------------------------------------
 
 Game Idea:
 
