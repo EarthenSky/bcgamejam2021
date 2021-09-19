@@ -8,9 +8,10 @@ using UnityEngine.UI;
 public class DisplayInventory : MonoBehaviour
 {
     public MouseItem mouseItem = new MouseItem();
-
+    public GameObject player;
     public GameObject canvas;
     public GameObject inventoryPrefab;
+    PlayerStats stats;
     InventoryObject inventory;
     public int X_START;
     public int Y_START;
@@ -25,6 +26,7 @@ public class DisplayInventory : MonoBehaviour
     {
         inventory = transform.parent.transform.parent.transform.parent.GetComponent<PlayerInventory>().inventory;
         createSlots();
+        PlayerStats stats = player.GetComponent<PlayerStats>();
     }
 
     // Update is called once per frame
@@ -93,7 +95,7 @@ public class DisplayInventory : MonoBehaviour
         ItemType type = inventory.database.getItem[itemsDisplayed[obj].item.Id].type;
         if (type == ItemType.Food)
         {
-            //rollback player health by one
+            stats.Heal(inventory.database.getItem[itemsDisplayed[obj].item.Id].name);   
         }
         itemsDisplayed[obj] = new InventorySlot();
         
