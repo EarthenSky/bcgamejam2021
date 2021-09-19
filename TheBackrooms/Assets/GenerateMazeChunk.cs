@@ -5,10 +5,14 @@ using UnityEngine.AI;
 
 public class GenerateMazeChunk : MonoBehaviour
 {
+    public Material wallMat;
+
     public GameObject cube;
     public GameObject floor;
     public GameObject ceiling;
     public GameObject ceilingLight;
+
+    public Mesh myGeom;
 
     public const int width = 16;
     public const int height = 16;
@@ -35,20 +39,32 @@ public class GenerateMazeChunk : MonoBehaviour
         return x > 0 && x < width && y > 0 && y < height;
     }
 
+    private static void Shuffle<T>(IList<T> list) {  
+        int n = list.Count;  
+        while (n > 1) {  
+            n--;  
+            int k = Random.Range(0, n + 1);  
+            T value = list[k];  
+            list[k] = list[n];  
+            list[n] = value;  
+        }  
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        Random.InitState(Mathf.FloorToInt(Mathf.PerlinNoise(transform.localPosition.x, transform.localPosition.y) * (float)int.MaxValue));
+        var trueSeed = Mathf.FloorToInt(Mathf.PerlinNoise((transform.position.x + 1000) / 1217.7f, (transform.position.z + 1201) / 1037.9f) * int.MaxValue);
+        Random.InitState(trueSeed);
         List<float> map = new List<float>();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                map.Add(Random.Range(0, 1000));
+                map.Add(Random.Range(1, 500) * Random.Range(1, 500));
             }
         }
 
         // TODO: use perlin noise to seed a random number generator
-        var randomX = Mathf.PerlinNoise(transform.localPosition.x, transform.localPosition.y);
-        var randomY = Mathf.PerlinNoise(transform.localPosition.y, transform.localPosition.x);
+        var randomX = Random.Range(1, 500)/500f * Mathf.PerlinNoise((transform.position.x + 1000)/3, (transform.position.z + 1000)/3);
+        var randomY = Random.Range(1, 500)/500f * Mathf.PerlinNoise((transform.position.z + 1201)/3, (transform.position.x + 1201)/3);
         var startX = Mathf.FloorToInt(randomX * width);
         var startY = Mathf.FloorToInt(randomY * height);
         
@@ -64,12 +80,11 @@ public class GenerateMazeChunk : MonoBehaviour
         }
 
         for (int i = 0; i < width * 2 * height * 2; i++) {
-            ceilingRotationMap.Add(Random.Range(0, 8));
+            ceilingRotationMap.Add(Random.Range(0, 24));
         }
 
         List<(int, int)> frontier = new List<(int, int)>();
         frontier.Add((startX, startY));
-        Debug.Log(frontier[0]);
 
         while (frontier.Count != 0) {
             // TODO: this sort is inefficient...
@@ -79,24 +94,22 @@ public class GenerateMazeChunk : MonoBehaviour
 
             // add to the actual map of walls & floors.
             (int, int) last = (-1, -1);
-            if (InMap(current.Item1 - 1, current.Item2) && GetAt(wallMap, (current.Item1 - 1)*2, (current.Item2)*2, width*2) == true)
-                last = (current.Item1 - 1, current.Item2);
-            else if (InMap(current.Item1 + 1, current.Item2) && GetAt(wallMap, (current.Item1 + 1)*2, (current.Item2)*2, width*2) == true)
-                last = (current.Item1 + 1, current.Item2);
-            else if (InMap(current.Item1, current.Item2 - 1) && GetAt(wallMap, (current.Item1)*2, (current.Item2 - 1)*2, width*2) == true)
-                last = (current.Item1, current.Item2 - 1);
-            else if (InMap(current.Item1, current.Item2 + 1) && GetAt(wallMap, (current.Item1)*2, (current.Item2 + 1)*2, width*2) == true)
-                last = (current.Item1, current.Item2 + 1);
+            List<(int, int)> directions = new List<(int, int)>{(current.Item1 - 1, current.Item2), (current.Item1 + 1, current.Item2), (current.Item1, current.Item2 - 1), (current.Item1, current.Item2 + 1)};
+            Shuffle(directions);
             
+            foreach(var item in directions) {
+                if (InMap(item.Item1, item.Item2) && GetAt(wallMap, item.Item1*2, item.Item2*2, width*2) == true) {
+                    last = item;
+                    break;
+                }
+            }
+
             // write the path
             if (last != (-1, -1)) {
                 if (GetAt(wallMap, (current.Item1 + last.Item1), (current.Item2 + last.Item2), width*2) == true) {
                     Debug.Log("nooooo");
                 }
                 SetAt(wallMap, (current.Item1 + last.Item1), (current.Item2 + last.Item2), true, width*2);
-            } else {
-                Debug.Log("fuck");
-                //Debug.Log(frontier);
             }
             SetAt(wallMap, current.Item1*2, current.Item2*2, true, width*2);
 
@@ -122,43 +135,87 @@ public class GenerateMazeChunk : MonoBehaviour
             }
         }
 
+        for (int i = 0; i < 32; i++) {
+            int x = Random.Range(1, width*2-1);
+            int y = Random.Range(1, height*2-1);
+            SetAt(wallMap, x, y, true, width*2);
+        }
+
+        var bottomSeed = Mathf.FloorToInt(Mathf.PerlinNoise((transform.position.x + 1000+width*5)/100f, (transform.position.z + 1000)/100f) * int.MaxValue);
+        var rightSeed = Mathf.FloorToInt(Mathf.PerlinNoise((transform.position.x + 1000+width*5*2)/100f, (transform.position.z + 1000+height*5)/100f) * int.MaxValue);
+        var topSeed = Mathf.FloorToInt(Mathf.PerlinNoise((transform.position.x + 1000+width*5)/100f, (transform.position.z + 1000+2*height*5)/100f) * int.MaxValue);
+        var leftSeed = Mathf.FloorToInt(Mathf.PerlinNoise((transform.position.x + 1000)/100f, (transform.position.z + 1000+height*5)/100f) * int.MaxValue);
+
+        Debug.Log(topSeed);
+        Debug.Log(bottomSeed);
+
+        Random.InitState(bottomSeed);
+        Random.Range(1, 8);
+        for (int i = 0; i < Random.Range(3, 9); i++) {
+            var v = Random.Range(2, width*2-3);
+            SetAt(wallMap, v, 0, true, width*2);
+            SetAt(wallMap, v, 1, true, width*2);
+        }
+
+        Random.InitState(rightSeed);
+        Random.Range(1, 8);
+        for (int i = 0; i < Random.Range(3, 9); i++) {
+            SetAt(wallMap, width*2-1, Random.Range(2, height*2-3), true, width*2);
+        }
+
+        Random.InitState(topSeed);
+        Random.Range(1, 8);
+        for (int i = 0; i < Random.Range(3, 9); i++) {
+            SetAt(wallMap, Random.Range(2, width*2-3), height*2-1, true, width*2);
+        }
+
+        Random.InitState(leftSeed);
+        Random.Range(1, 8);
+        for (int i = 0; i < Random.Range(3, 9); i++) {
+            var v = Random.Range(2, height*2-3);
+            SetAt(wallMap, 0, v, true, width*2);
+            SetAt(wallMap, 1, v, true, width*2);
+        }
+
         GenerateMesh();
     }
 
     private void GenerateMesh() {
-        GameObject groundTiles = GameObject.Instantiate(new GameObject("groundTiles"), gameObject.transform);
-        GameObject ceilingList = GameObject.Instantiate(new GameObject("ceilingList"), gameObject.transform);
+        GameObject groundTiles = new GameObject("groundTiles");
+        groundTiles.transform.parent = transform;
+        GameObject ceilingList = new GameObject("ceilingList");
+        ceilingList.transform.parent = transform;
 
         for (int y = 0; y < height * 2; y++) {
             for (int x = 0; x < width * 2; x++) {
                 if (GetAt(wallMap, x, y, width*2)) {
-                    GameObject o = GameObject.Instantiate(floor, new Vector3(transform.localPosition.x + x * 5, 0, transform.localPosition.y + y * 5), Quaternion.identity, groundTiles.transform);
+                    GameObject o = GameObject.Instantiate(floor, new Vector3(transform.localPosition.x + x * 5, 0, transform.localPosition.z + y * 5), Quaternion.identity, groundTiles.transform);
                     o.layer = LayerMask.NameToLayer("Ground");
                 } else {
-                    GameObject.Instantiate(cube, new Vector3(transform.localPosition.x + x * 5, 0, transform.localPosition.y + y * 5), Quaternion.identity, groundTiles.transform);
+                    GameObject.Instantiate(cube, new Vector3(transform.localPosition.x + x * 5, 0, transform.localPosition.z + y * 5), Quaternion.identity, groundTiles.transform);
                 }
             }
         }
 
         for (int y = 0; y < height * 2; y++) {
             for (int x = 0; x < width * 2; x++) {
-                var rot = GetAt(ceilingRotationMap, x, y, width*2); // no longer checks for rotation
-                if (rot == 0) {
-                    GameObject ceil = GameObject.Instantiate(ceilingLight, new Vector3(transform.localPosition.x + x * 5, 6, transform.localPosition.y + y * 5), Quaternion.identity, ceilingList.transform);
-                    ceil.transform.Rotate(new Vector3(0, 0, 180));
-                } else {
-                    GameObject ceil = GameObject.Instantiate(ceiling, new Vector3(transform.localPosition.x + x * 5, 6, transform.localPosition.y + y * 5), Quaternion.identity, ceilingList.transform);
-                    ceil.transform.Rotate(new Vector3(0, 0, 180));
+                if (GetAt(wallMap, x, y, width*2)) {
+                    var rot = GetAt(ceilingRotationMap, x, y, width*2); // no longer checks for rotation
+                    if (rot == 0) {
+                        GameObject ceil = GameObject.Instantiate(ceilingLight, new Vector3(transform.localPosition.x + x * 5, 4, transform.localPosition.z + y * 5), Quaternion.identity, ceilingList.transform);
+                        ceil.transform.Rotate(new Vector3(0, 0, 180));
+                    } else {
+                        GameObject ceil = GameObject.Instantiate(ceiling, new Vector3(transform.localPosition.x + x * 5, 4, transform.localPosition.z + y * 5), Quaternion.identity, ceilingList.transform);
+                        ceil.transform.Rotate(new Vector3(0, 0, 180));
+                    }
                 }
-
             }
         }
-        
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
+    void Update() {
+
     }
+
 }
